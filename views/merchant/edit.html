@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+            font-family: sans-serif;
+        }
+
+        table, th, td{
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+
+
+        table{
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        tr:nth-child(even){
+            background-color:#dddddd ;
+        }
+
+        th{
+            background-color:#5a5a5a ;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div style="width: 100%; text-align: center; margin-top: 50px; margin-bottom: 30px;">
+<h2>Editable HTMLTable Cells</h2>
+    </div>
+
+    <table id="example">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Office</th>
+                <th>Age</th>
+                <th>Start Date</th>
+                <th>Salary</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Tiger</td>
+                <td>System Architect</td>
+                <td>Edinburgh</td>
+                <td>31</td>
+                <td>2011</td>
+                <td>320 000</td>
+            </tr>
+
+            <tr>
+                <td>Tiger</td>
+                <td>System Architect</td>
+                <td>Edinburgh</td>
+                <td>31</td>
+                <td>2011</td>
+                <td>320 000</td>
+            </tr>
+            <tr>
+                <td>Tiger</td>
+                <td>System Architect</td>
+                <td>Edinburgh</td>
+                <td>31</td>
+                <td>2011</td>
+                <td>320 000</td>
+            </tr>
+            <tr>
+                <td>Tiger</td>
+                <td>System Architect</td>
+                <td>Edinburgh</td>
+                <td>31</td>
+                <td>2011</td>
+                <td>320 000</td>
+            </tr>
+            <tr>
+                <td>Tiger</td>
+                <td>System Architect</td>
+                <td>Edinburgh</td>
+                <td>31</td>
+                <td>2011</td>
+                <td>320 000</td>
+            </tr>
+        </tbody>
+    </table>
+    
+<script>
+
+    var table = document.getElementById('example')
+    var cells = table.getElementsByTagName('td')
+
+    for(var i = 0; i< cells.length; i++){
+    cells[i].onclick = function(){
+    console.log('clicked')
+    if(this.hasAttribute('data-clicked')){
+        return;
+    }
+
+    this.setAttribute('data-clicked', 'yes')
+    this.setAttribute('data-text', this.innerHTML)
+
+    var input = document.createElement('input');
+    input.setAttribute('type', 'text')
+    input.value = this.innerHTML
+    input.style.width = this.offsetWidth - (this.clientLeft * 2) + 'px';
+    input.style.height = this.offsetHeight - (this.clientTop * 2) + "px";
+    input.style.border = '0px';
+    input.style.fontFamily ="inherit";
+    input.style.fontSize ="inherit";
+    input.style.textAlign = "inherit";
+    input.style.backgroundColor = 'LightGoldenRodYellow';
+
+    input.onblur = function(){
+        var td = input.parentElement;
+        var orig_text = input.parentElement.getAttribute('data-text');
+        var current_text = this.value;
+
+        if(orig_text != current_text ){
+            //there are changes
+            //save into db using ajax
+            td.removeAttribute('data-clicked')
+            td.removeAttribute('data-text')
+            td.innerHTML = current_text
+            td.style.cssText = 'padding: 5px';
+            console.log(orig_text + 'is change to ' + current_text)
+        } else{
+            td.removeAttribute('data-clicked')
+            td.removeAttribute('data-text')
+            td.innerHTML = orig_text
+            td.style.cssText = 'padding: 5px';
+            console.log('No changes made')
+        }
+    }
+    this.innerHTML = ''
+    this.style.cssText = 'padding: 0px';
+    this.append(input);
+    this.firstElementChild.select();
+
+}
+    }
+
+    console.log(cells)
+
+
+
+</script>
+
+</body>
+</html>

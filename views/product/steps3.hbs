@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<!--
+Author: Keenthemes
+Product Name: Metronic - Bootstrap 5 HTML, VueJS, React, Angular & Laravel Admin Dashboard Theme
+Purchase: https://1.envato.market/EA4JP
+Website: http://www.keenthemes.com
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Dribbble: www.dribbble.com/keenthemes
+Like: www.facebook.com/keenthemes
+License: For each use you must have a valid license purchased only from above link in order to legally use the theme for your project.
+-->
+<html lang="en">
+	<!--begin::Head-->
+	<head><base href="../../">
+			<title>SchoolZoid</title>
+		<meta charset="utf-8" />
+		<meta name="description" content="SchoolZoid is an online school management system that saves you time and makes your school look professional ." />
+		<meta name="keywords" content="SchoolZoid is world's first fully online school management system with scheduler, parent portal, attendance, homework, grades, report card and more." />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:type" content="article" />
+		<meta property="og:title" content="This school management software is for learning, administration, and management activities in schools, colleges, universities." />
+		<meta property="og:url" content="https://schoolzoid.co.zw" />
+		<meta property="og:site_name" content="SchoolZoid | Arioc Digital Agency" />
+		<link rel="canonical" href="https://schoolzoid.co.zw" />
+		<link rel="shortcut icon" href="assets/media/logos/favicon.ico" />
+		<!--begin::Fonts-->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+		<!--end::Fonts-->
+		<!--begin::Global Stylesheets Bundle(used by all pages)-->
+		<link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
+		<link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+		<!--end::Global Stylesheets Bundle-->
+	</head>
+
+		 <style>
+    
+.errors {
+    background: #e79892;
+    padding: 5px;
+    margin-bottom: 10px;
+    min-width: 200px;
+    display: inline-block;
+    border: 1px solid #e74c3c;
+  }
+  
+  .errors ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .success {
+    background: #80cca0;
+    padding: 5px;
+    margin-bottom: 10px;
+    min-width: 200px;
+    display: inline-block;
+    border: 1px solid black;
+  }
+</style>
+	<!--end::Head-->
+	<!--begin::Body-->
+	<body id="kt_body" class="bg-body">
+		<!--begin::Main-->
+		<!--begin::Root-->
+		<div class="d-flex flex-column flex-root">
+			<!--begin::Authentication - Multi-steps-->
+			<div class="d-flex flex-column flex-lg-row flex-column-fluid stepper stepper-pills stepper-column" id="kt_create_account_stepper">
+				<!--begin::Aside-->
+				<div class="d-flex flex-column flex-lg-row-auto w-xl-500px bg-lighten shadow-sm">
+					<!--begin::Wrapper-->
+					<div class="d-flex flex-column position-xl-fixed top-0 bottom-0 w-xl-500px scroll-y">
+						<!--begin::Header-->
+						<div class="d-flex flex-row-fluid flex-column flex-center p-10 pt-lg-20">
+							<!--begin::Logo-->
+							<a  class="mb-10 mb-lg-20">
+								<img alt="Logo" src="assets/media/logos/logo-1.png" class="h-40px" />
+							</a>
+							<!--end::Logo-->
+							<!--begin::Nav-->
+							<div class="stepper-nav">
+								<!--begin::Step 1-->
+								<div class="stepper-item current" data-kt-stepper-element="nav">
+									<!--begin::Line-->
+									<div class="stepper-line w-40px"></div>
+									<!--end::Line-->
+									<!--begin::Icon-->
+									<div class="stepper-icon w-40px h-40px">
+										<i class="stepper-check fas fa-check"></i>
+										<span class="stepper-number">1</span>
+									</div>
+									<!--end::Icon-->
+									<!--begin::Label-->
+									<div class="stepper-label">
+										<h3 class="stepper-title">Select Shop</h3>
+										<div class="stepper-desc fw-bold">Customer</div>
+									</div>
+									<!--end::Label-->
+								</div>
+								<!--end::Step 1-->
+								<!--begin::Step 2-->
+							
+								<!--end::Step 2-->
+								<!--begin::Step 3-->
+								
+								<!--end::Step 3-->
+								<!--begin::Step 4-->
+							
+								<!--end::Step 4-->
+								<!--begin::Step 5-->
+								
+								<!--end::Step 5-->
+							</div>
+							<!--end::Nav-->
+						</div>
+						<!--end::Header-->
+					
+					</div>
+					<!--end::Wrapper-->
+				</div>
+				<!--begin::Aside-->
+				<!--begin::Body-->
+				<div class="d-flex flex-column flex-lg-row-fluid py-10">
+					<!--begin::Content-->
+					<div class="d-flex flex-center flex-column flex-column-fluid">
+						<!--begin::Wrapper-->
+						<div class="w-lg-700px p-10 p-lg-15 mx-auto">
+							     	{{# if success }}
+    <section class="success">
+        <h2>Successful Validation!</h2>
+    </section>
+{{ else }}
+    {{# if errors }}
+        <section class="errors">
+            <ul>
+                {{# each errors }}
+                    <li>{{ this.msg }}</li>
+                {{/each}}
+            </ul>
+        </section>
+
+        {{/if}}
+        {{#if message}}
+        <div  class="{{message.type}}">
+            <strong>{{message.intro}}</strong>{{message.message}}
+        </div>
+        {{/if}}
+							<!--begin::Form-->
+							<form class="my-auto pb-5" novalidate="novalidate" id="kt_create_account_form" method="post" action="/merch/land">
+								<!--begin::Step 1-->
+								<div class="current" data-kt-stepper-element="content">
+									<!--begin::Wrapper-->
+											<div class="w-100">
+										<!--begin::Heading-->
+										<div class="pb-10 pb-lg-12">
+											<!--begin::Title-->
+											<h2 class="fw-bolder text-dark">Shop Details</h2>
+											<!--end::Title-->
+											<!--begin::Notice-->
+											<div class="text-muted fw-bold fs-6">
+											<a href="#" class="link-primary fw-bolder"></a>.</div>
+											<!--end::Notice-->
+										</div>
+										<!--end::Heading-->
+										<!--begin::Input group-->
+										<div class="fv-row mb-10">
+											<!--begin::Label-->
+											<label class="form-label required">Customer</label>
+											<!--end::Label-->
+											<!--begin::Input-->
+										<select name="customer" id="customer"  class="form-control form-control-lg form-control-solid" onclick="ClickX1(value)" >
+                        <option value="Select Category">Customer</option>
+			
+                                                                     {{#each arr}}
+                                                               <option value="{{this.customer}}">{{this.customer}}</option>
+                                                                     {{/each}}
+                                                                
+																			
+															
+							
+															
+							
+												
+											</select>
+
+							
+											<!--end::Input-->
+										</div>
+											<script>
+                                                function ClickX1(value){
+                                                    console.log( value)
+													  document.getElementById('shop').list = ''
+													    document.getElementById('shop').value = ''
+														document.getElementById('shops').innerHTML = ''
+                                                    var opts = "<option value=''>select</option>";
+                                                     $.ajax({
+                dataType: 'json',
+                data: {
+                    value: value,
+                    
+                },
+                type: 'POST',
+                url: "/merch/fill",
+                success: function(data) {
+               for(var i = 0;i < data.length; i++){
+               opts += "<option value='"+data[i].shop+"'>"+data[i].shop+"</option>"
+            
+               }
+			   
+             
+                
+                
+          document.getElementById('shops').innerHTML = opts
+           
+                 
+                 
+                 
+          
+                }
+               
+            });
+ 
+                                                }
+                                            </script>
+										<!--end::Input group-->
+										<!--begin::Input group-->
+									
+										<!--end::Input group-->
+										<!--begin::Input group-->
+										<div class="fv-row mb-10">
+											<!--begin::Label-->
+											<label class="form-label required">Shop</label>
+											<!--end::Label-->
+											<!--begin::Input-->
+										<input name="shop" id="shop" class="form-control form-control-lg form-control-solid" autocomplete="off" list="shops" />
+											<!--end::Input-->
+										</div>
+										<!--end::Input group-->
+										<!--begin::Input group-->
+										  <datalist id="shops">
+                                                       
+                                                           
+                                                                 
+                                                            </datalist>
+										
+
+										  								<!--begin::Row-->
+													
+									</div>
+									<!--end::Wrapper-->
+								</div>
+								<!--end::Step 1-->
+								<!--begin::Step 2-->
+								
+								<!--end::Step 5-->
+								<!--begin::Actions-->
+							
+										<button type="submit" class="btn btn-lg btn-primary" >
+											<span class="indicator-label">Next
+											<!--begin::Svg Icon | path: icons/duotune/arrows/arr064.svg-->
+											<span class="svg-icon svg-icon-4 ms-2">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+													<rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1" transform="rotate(-180 18 13)" fill="black" />
+													<path d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z" fill="black" />
+												</svg>
+											</span>
+											<!--end::Svg Icon--></span>
+											<span class="indicator-progress">Please wait...
+											<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+										</button>
+									
+									</div>
+								</div>
+								<!--end::Actions-->
+							</form>
+							 {{/if}}
+							<!--end::Form-->
+						</div>
+						<!--end::Wrapper-->
+					</div>
+					<!--end::Content-->
+					<!--begin::Footer-->
+					<div class="d-flex flex-center flex-wrap fs-6 p-5 pb-0">
+						<!--begin::Links-->
+						
+						<!--end::Links-->
+					</div>
+					<!--end::Footer-->
+				</div>
+				<!--end::Body-->
+			</div>
+			<!--end::Authentication - Multi-steps-->
+		</div>
+		<!--end::Root-->
+		<!--end::Main-->
+		<!--begin::Javascript-->
+		<script>var hostUrl = "assets/";</script>
+		<!--begin::Global Javascript Bundle(used by all pages)-->
+		<script src="assets/plugins/global/plugins.bundle.js"></script>
+		<script src="assets/js/scripts.bundle.js"></script>
+		<!--end::Global Javascript Bundle-->
+		<!--begin::Page Custom Javascript(used by this page)-->
+		<script src="assets/js/custom/utilities/modals/create-account.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+		<!--end::Page Custom Javascript-->
+		<!--end::Javascript-->
+	</body>
+	<!--end::Body-->
+</html>

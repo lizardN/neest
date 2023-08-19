@@ -1,0 +1,79 @@
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+<button onclick="clickForm()">Click</button>
+<div id="chart">
+
+</div>
+<script>
+
+
+
+
+var options = {
+  chart: {
+      height: 350,
+      type: 'bar',
+  },
+  dataLabels: {
+      enabled: false
+  },
+  series: [],
+  title: {
+      text: 'Ajax Example',
+  },
+  noData: {
+    text: 'Loading...'
+  }
+}
+
+var chart = new ApexCharts(
+  document.querySelector("#chart"),
+  options
+);
+
+chart.render();
+
+
+
+function clickForm(){
+/*var url = 'http://my-json-server.typicode.com/apexcharts/apexcharts.js/yearly';
+
+$.getJSON(url, function(response) {
+  chart.updateSeries([{
+    name: 'Sales',
+    data: response
+  }])
+});
+}
+*/
+$.ajax({
+       
+    dataType: 'json',
+    type: 'POST',
+    data:{customer:'Pick n Pay', shop:'KAMFINSA', category:'cheese', date:'5/3/2023 - 5/14/2023'},
+    url: "/dashChart",
+    success: function(data) {
+console.log(data,'data')
+let labels1 =[]
+let labels2=[]
+for (var i = 0;i<data.length;i++){
+        labels2.push(data[i].productName,data[i].qty)
+       // labels1.push(data[i].qty)
+     }
+ chart.updateSeries([{
+    name: 'Sales',
+    data: labels2
+  }])
+    }
+})
+}
+</script>
+
+
+
+
+
+
+
+
+
