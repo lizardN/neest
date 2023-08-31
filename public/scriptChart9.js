@@ -10,7 +10,7 @@ $.ajax({
       let labels1=[]
       let labels2=[]
 for (var i = 0;i<data.length;i++){
-        labels2.push(data[i].shop)
+        labels2.push(data[i].customer)
         labels1.push(data[i].currentQuantity)
      }
     let colors2 = ['#49A9EA', '#36CAAB', '#34495E', '#B370CF','#FFA07A','#FFFF00'];

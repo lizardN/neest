@@ -1383,9 +1383,9 @@ router.post('/dashChartStore',isLoggedIn,function(req,res){
       let sdate = docs[i].dateValue
       if(sdate >= startValue && sdate <= endValue){
         console.log(docs[i],'docs')
-       if(arr.length > 0 && arr.find(value => value.shop == docs[i].shop)){
+       if(arr.length > 0 && arr.find(value => value.customer == docs[i].customer)){
               console.log('true')
-             arr.find(value => value.shop == docs[i].shop).qty += docs[i].qty;
+             arr.find(value => value.customer == docs[i].customer).qty += docs[i].qty;
         }else{
 arr.push(docs[i])
         }
