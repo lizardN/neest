@@ -1376,7 +1376,7 @@ router.post('/dashChartStore',isLoggedIn,function(req,res){
   console.log(startValue,endValue,'output')
 
 
-  Sales.find({customer:customer,productName:product,category:category},function(err,docs) {
+  Sales.find(,function(err,docs) {
    // console.log(docs,'docs')
     for(var i = 0;i<docs.length;i++){
 

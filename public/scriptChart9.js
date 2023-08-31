@@ -3,7 +3,7 @@ $.ajax({
        
     dataType: 'json',
     type: 'POST',
-    data:{customer:'Pick n Pay'},
+
     url: "/dashStockStore",
     success: function(data) {
       console.log(data,'data')
