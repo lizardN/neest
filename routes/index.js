@@ -3,10 +3,13 @@ var router = express.Router();
 var User = require('../models/user');
 var Cart = require('../models/cart');
 var Dispatch = require('../models/dispatch');
+var Truck = require('../models/truck');
+var StockV = require('../models/stockV');
 var Category = require('../models/category');
 var Customer = require('../models/customer');
 var nodemailer = require('nodemailer');
 var Product = require('../models/product');
+var StockR = require('../models/stockR');
 var SaleStats = require('../models/saleStats');
 var SaleStats2 = require('../models/saleStats2');
 var Chart = require('../models/chart')
@@ -2553,10 +2556,45 @@ router.post('/info',isLoggedIn, upload.single('file'),function(req,res){
                         
                          });
 
-  
+                         router.get('/viewStockRcvd/',isLoggedIn, (req, res) => {
+                          var pro = req.user
+                          var arr = []
+                          var id = req.params.id
+                          Truck.find({},(err, docs) => {
+
+                            for(var i = docs.length - 1; i>=0; i--){
+        
+                              arr.push(docs[i])
+                            }
+                              if (!err) {
+                                  res.render("product/truckList", {
+                                     listX:arr,pro:pro
+                                    
+                                  });
+                              }
+                          });
+                          });
+
+                         
+
+                         router.get('/viewStockRcvd/:id',isLoggedIn, (req, res) => {
+                          var pro = req.user
+                          var id = req.params.id
+                          console.log(id,'333')
+                          StockV.find({code:id},(err, docs) => {
+                              if (!err) {
+                                  res.render("product/productList3", {
+                                     listX:docs,pro:pro
+                                    
+                                  });
+                              }
+                          });
+                          });
 
 
 
+
+/*
                       
 
                          router.get('/viewStock',isLoggedIn, (req, res) => {
@@ -2609,13 +2647,13 @@ arr.push(docs[i])
    
 });
   })
-  
+  */
 
 
 
 
 
-                          router.get('/viewProducts',isLoggedIn, (req, res) => {
+                          router.get('/viewStock',isLoggedIn, (req, res) => {
                             var pro = req.user
                             Product.find({},(err, docs) => {
                                 if (!err) {
@@ -2626,6 +2664,18 @@ arr.push(docs[i])
                                 }
                             });
                             });
+
+                            router.get('/viewProducts',isLoggedIn, (req, res) => {
+                              var pro = req.user
+                              Product.find({},(err, docs) => {
+                                  if (!err) {
+                                      res.render("product/listXX", {
+                                         list:docs,pro:pro
+                                        
+                                      });
+                                  }
+                              });
+                              });
   
 
 
@@ -2639,10 +2689,15 @@ router.get('/search',isLoggedIn,function(req,res){
 
 router.get('/stockTrack',isLoggedIn, (req, res) => {
   var pro = req.user
+  var arr=[]
   Dispatch.find({},(err, docs) => {
       if (!err) {
+        for(var i = docs.length - 1; i>=0; i--){
+        
+          arr.push(docs[i])
+        }
           res.render("admin/dispatchList", {
-             list:docs,pro:pro
+             list:arr,pro:pro
             
           });
       }
@@ -3355,6 +3410,7 @@ arr.push(joc[i])
 
 oldQty = doc.cases
 let quantity = doc.unitCases * rcvdQuantity
+console.log(quantity)
 
     Stock.findByIdAndUpdate(id,{$set:{cases:rcvdQuantity, quantity:quantity}},function(err,locs){
     
@@ -3752,13 +3808,14 @@ router.get('/notify/:id', isLoggedIn, function(req,res){
 
 let subject = tocs[0].subject
 let message = tocs[0].message
+let link = tocs[0].link
 let status4 = tocs[0].status4
 let user = tocs[0].user
 let date = tocs[0].date
 let senderPhoto = tocs[0].senderPhoto
 
     
-    res.render('product/notView',{message:message, subject:subject,status4:status4,user:user,date:date,senderPhoto:senderPhoto})
+    res.render('product/notView',{message:message,link:link, subject:subject,status4:status4,user:user,date:date,senderPhoto:senderPhoto})
   })
 
 })
@@ -4542,13 +4599,469 @@ else{
    
  
  
+ //returns
  
- 
+
+router.get('/returnsPreset',isLoggedIn,  function(req,res){
+  var pro = req.user
+  var errorMsg = req.flash('danger')[0];
+  var successMsg = req.flash('success')[0];
+  res.render('product/batchReturns',{pro:pro,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg})
+  })
+
  
  
 
 
+  router.post('/returnsPreset',isLoggedIn,  function(req,res){
+    var id =req.user._id
+      var shop = req.body.shop
+      var customer = req.body.customer
+  
+      var m2 = moment()
+      var mformat = m2.format('L')
+      var pro = req.user
+  
+      
+      
+  
+      req.check('shop','Enter Shop').notEmpty();
+      req.check('customer','Enter Customer').notEmpty();
+   
+      
+    
+      
+      var errors = req.validationErrors();
+       
+      if (errors) {
+        req.session.errors = errors;
+        req.session.success = false;
+       // res.render('product/dispatchCust',{ errors:req.session.errors,pro:pro})
+  
+        
+        req.flash('danger', req.session.errors[0].msg);
+         
+          
+        res.redirect('/returnsPreset');
+  
+  
+      
+      }
+      
+      else 
+      
+      Shop.findOne({'customer':customer,'name':shop})
+      .then(grower =>{
+      if(grower){
+     
+        
+      
+                  User.findByIdAndUpdate(id,{$set:{shop:shop,customer:customer}}, function(err,coc){
+            
+          
+                  })
+                  res.redirect('/returns')
+      
+        
+            
+            
+            
+       
+  
+      
+  
+      
+      }else{
+  
+        req.flash('danger', 'Shop Or Customer Does not Exist');
+   
+        res.redirect('/returnsPreset');
+  
+  
+      
+  
+      }
+      
+      })
+      
+      
+      })
+    
+  
+  
+  
+  
+router.get('/returns',isLoggedIn,function(req,res){
+  var pro = req.user
+  var customer = req.user.customer
 
+  var shop = req.user.shop
+
+  if( customer == 'null' || shop == 'null' ){
+    res.redirect('/returnsPreset')
+  }else{
+
+  
+  
+  var errorMsg = req.flash('danger')[0];
+  var successMsg = req.flash('success')[0];
+  res.render('product/stock4',{pro:pro,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg,shop:shop,customer:customer})
+}
+})
+
+
+router.post('/returns',isLoggedIn, function(req,res){
+  var pro = req.user
+  var barcodeNumber = req.body.barcodeNumber;
+  var name = req.body.name;
+  var m = moment()
+  var year = m.format('YYYY')
+  var dateValue = m.valueOf()
+  var date = m.toString()
+  var numDate = m.valueOf()
+var month = m.format('MMMM')
+var shop = req.user.shop
+var customer = req.user.customer
+var mformat = m.format("L")
+var code = req.user.code
+  var receiver = req.user.fullname
+  var category = req.body.category
+  
+  var qtyReturned = req.body.qtyReturned
+
+
+
+  req.check('barcodeNumber','Enter Barcode Number').notEmpty();
+  req.check('name','Enter Product Name').notEmpty();
+  req.check('qtyReturned','Enter Qty Returned').notEmpty();
+ 
+  
+
+  
+  
+  var errors = req.validationErrors();
+   
+  if (errors) {
+
+    req.session.errors = errors;
+    req.session.success = false;
+   // res.render('product/stock',{ errors:req.session.errors,pro:pro})
+   req.flash('danger', req.session.errors[0].msg);
+       
+        
+   res.redirect('/returns');
+  
+  }
+  else
+
+ {
+
+  Product.findOne({'name':name})
+  .then(hoc=>{
+
+    if(hoc){
+  var book = new StockR();
+  book.barcodeNumber = barcodeNumber
+  book.category = category
+  book.name = name
+  book.mformat = mformat
+  book.shop =  shop
+  book.customer = customer
+ // book.unitCases= unitCases
+  //book.code  = code
+  book.status = 'null'
+  book.qtyReturned = qtyReturned
+
+      
+       
+        book.save()
+          .then(pro =>{
+
+            StockR.find({mformat:mformat,customer:customer,shop:shop,status:'null'},(err, docs) => {
+              let size = docs.length - 1
+              console.log(docs[size],'fff')
+              res.send(docs[size])
+                      })
+        })
+       
+      
+      }
+    }) 
+
+      }
+})
+
+
+
+router.post('/stock3',isLoggedIn, (req, res) => {
+  var pro = req.user
+  var customer = req.user.customer
+  var shop = req.user.shop
+  StockR.find({shop:shop,customer:customer,status:'null'},(err, docs) => {
+ 
+    res.send(docs)
+            })
+
+  }); 
+
+
+
+
+
+
+
+
+
+
+  
+//saveBatch3
+
+router.get('/saveBatch/:id',isLoggedIn, function(req,res){
+  var pro = req.user
+ var receiver = req.user.fullname
+ var code = req.params.id
+ var uid = req.user._id
+var customer = req.user.customer
+var shop = req.user.shop
+var dispatcher = req.user.fullname
+var m2 = moment()
+var wformat = m2.format('L')
+var year = m2.format('YYYY')
+var dateValue = m2.valueOf()
+var date = m2.toString()
+var numDate = m2.valueOf()
+var month = m2.format('MMMM')
+
+
+//var mformat = m.format("L")
+
+
+
+StockR.find({shop:code,status:'null'},function(err,locs){
+
+for(var i=0;i<locs.length;i++){
+let barcodeNumber = locs[i].barcodeNumber
+let qtyReturned= locs[i].qtyReturned
+//let quantity = locs[i].cases * locs[i].unitCases
+console.log(qtyReturned,'33xx')
+let date3 = locs[i].mformat
+let m = moment(date3)
+let year = m.format('YYYY')
+let dateValue = m.valueOf()
+let date = m.toString()
+let numDate = m.valueOf()
+let month = m.format('MMMM')
+let idN = locs[i]._id
+
+
+  StockR.findByIdAndUpdate(idN,{$set:{status:'saved'}},function(err,pocs){
+
+  })
+  
+
+  
+
+  ShopStock.findOne({'barcodeNumber':barcodeNumber,'shop':shop,'customer':customer})
+  .then(hoc=>{
+
+let nqty = hoc.currentQuantity - qtyReturned
+console.log(hoc.currentQuantity, qtyReturned,'nqty')
+console.log(hoc,'333')
+
+ShopStock.findByIdAndUpdate(hoc._id,{$set:{ currentQuantity:nqty}},function(err,kocs){
+
+})
+
+  })
+
+     
+}
+
+
+
+req.flash('success', 'Stock Returned Successfully');
+res.redirect('/returnsPreset')
+}) 
+})
+
+
+
+
+
+
+router.get('/viewReturns',isLoggedIn, (req, res) => {
+  var pro = req.user
+  var arr=[]
+  StockR.find({},(err, docs) => {
+      if (!err) {
+        for(var i = docs.length - 1; i>=0; i--){
+        
+          arr.push(docs[i])
+        }
+          res.render("product/rtnsList", {
+             list:arr,pro:pro
+            
+          });
+      }
+  });
+  });
+
+
+
+
+
+
+  
+  router.get('/viewStockRcvd/',isLoggedIn, (req, res) => {
+    var pro = req.user
+    var arr = []
+    var id = req.params.id
+    Truck.find({},(err, docs) => {
+
+      for(var i = docs.length - 1; i>=0; i--){
+
+        arr.push(docs[i])
+      }
+        if (!err) {
+            res.render("product/truckListA", {
+               listX:arr,pro:pro
+              
+            });
+        }
+    });
+    });
+
+   
+
+   router.get('/viewStockRcvd/:id',isLoggedIn, (req, res) => {
+    var pro = req.user
+    var id = req.params.id
+    console.log(id,'333')
+    StockV.find({code:id},(err, docs) => {
+        if (!err) {
+            res.render("product/productList32A", {
+               listX:docs,pro:pro
+              
+            });
+        }
+    });
+    });
+
+
+
+
+
+
+
+    router.get('/viewStockDispatched/',isLoggedIn, (req, res) => {
+      var pro = req.user
+      var arr = []
+      var id = req.params.id
+      Discode.find({},(err, docs) => {
+    
+        for(var i = docs.length - 1; i>=0; i--){
+    
+          arr.push(docs[i])
+        }
+          if (!err) {
+              res.render("product/discodeListA", {
+                 listX:arr,pro:pro
+                
+              });
+          }
+      });
+      });
+    
+     
+    
+     router.get('/viewStockDispatched/:id',isLoggedIn, (req, res) => {
+      var pro = req.user
+      var id = req.params.id
+      console.log(id,'333')
+      StockD.find({code:id},(err, docs) => {
+          if (!err) {
+              res.render("product/productList4A", {
+                 listX:docs,pro:pro
+                
+              });
+          }
+      });
+      });
+    
+
+
+//autocomplete shop stock
+router.get('/autocompleteProductR/',isLoggedIn, function(req, res, next) {
+  var id = req.user._id
+
+    var regex= new RegExp(req.query["term"],'i');
+   
+    var productFilter =ShopStock.find({name:regex},{'name':1}).sort({"updated_at":-1}).sort({"created_at":-1}).limit(20);
+  
+    
+    productFilter.exec(function(err,data){
+   
+ 
+  console.log('data',data)
+  
+  var result=[];
+  
+  if(!err){
+     if(data && data.length && data.length>0){
+       data.forEach(pro=>{
+     
+     
+  
+          
+         let obj={
+           id:pro._id,
+           label: pro.name
+
+       
+     
+       
+         
+          
+  
+           
+         };
+        
+         result.push(obj);
+      
+       
+       });
+  
+     }
+   
+     res.jsonp(result);
+
+    }
+  
+  })
+ 
+  });
+
+
+  router.post('/autoProductR',isLoggedIn,function(req,res){
+    var code = req.body.code
+    var customer = req.user.customer
+    var shop = req.user.shop
+
+
+    
+   
+    ShopStock.find({name:code,customer:customer,shop:shop},function(err,docs){
+   if(docs == undefined){
+     res.redirect('/')
+   }else
+  
+      res.send(docs[0])
+    })
+  
+  
+  })
+
+  
 
 
 function encryptPassword(password) {

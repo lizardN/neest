@@ -10,6 +10,7 @@ var schema = new Schema({
     message: {type: String, required: true},
     subject:{type:String,required:true},
     user:{type:String,required:true},
+    link:{type:String,required:true},
     status: {type: String, required: true},
     status1: {type: String, required: true},
     status2: {type: String, required: true},

@@ -9,7 +9,6 @@ var schema = new Schema({
     quantityDispatched: {type: Number, required: true},
     unitCases: {type: Number, required: true},
     cases: {type: Number, required: true},
-    cases: {type: Number, required: true},
     casesDispatched: {type: Number, required: true},
     quantityVariance: {type: Number, required: true},
     dispatcher: {type: String, required: true},

@@ -3,6 +3,7 @@ var router = express.Router();
 var User = require('../models/user');
 var Cart = require('../models/cart');
 var Dispatch = require('../models/dispatch');
+var Discode = require('../models/dispatchCode');
 var Category = require('../models/stock');
 var nodemailer = require('nodemailer');
 var Product = require('../models/product');
@@ -18,6 +19,7 @@ var CStats = require('../models/categoryStats');
 var IncStats = require('../models/incomeStats');
 var Shop = require('../models/shop');
 var Stock = require('../models/stock');
+var StockD = require('../models/stockD');
 var Note = require('../models/note');
 var SalesStats= require('../models/salesStats');
 const keys = require('../config1/keys')
@@ -37,10 +39,436 @@ const JWT_RESET_KEY = "jwtreset987";
 
 
 
+router.get('/stockBatch',isLoggedIn,  function(req,res){
+  var pro = req.user
+  var errorMsg = req.flash('danger')[0];
+  var successMsg = req.flash('success')[0];
+  res.render('product/dispatchCust',{pro:pro,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg})
+  })
+
+
+
+
+  router.post('/stockBatch',isLoggedIn,  function(req,res){
+  var id =req.user._id
+    var shop = req.body.shop
+    var customer = req.body.customer
+    var code = req.body.code
+    var m2 = moment()
+    var mformat = m2.format('L')
+    var pro = req.user
+
+    
+    
+
+    req.check('shop','Enter Shop').notEmpty();
+    req.check('customer','Enter Customer').notEmpty();
+    req.check('code','Enter Code').notEmpty();
+    
+  
+    
+    var errors = req.validationErrors();
+     
+    if (errors) {
+      req.session.errors = errors;
+      req.session.success = false;
+     // res.render('product/dispatchCust',{ errors:req.session.errors,pro:pro})
+
+      
+      req.flash('danger', req.session.errors[0].msg);
+       
+        
+      res.redirect('/ship/stockBatch');
+
+
+    
+    }
+    
+    else 
+    
+    Shop.findOne({'customer':customer,'name':shop})
+    .then(grower =>{
+    if(grower){
+      Discode.findOne({code:code})
+      .then(lock=>{
+        if(!lock){
+          var truck = new Discode()
+          truck.code = code
+          truck.shop = shop
+          truck.customer = customer
+          truck.mformat = mformat
+    
+          truck.save()
+              .then(pro =>{
+    
+                User.findByIdAndUpdate(id,{$set:{shop:shop,customer:customer,code:code}}, function(err,coc){
+          
+        
+                })
+                res.redirect('/ship/dispatch2')
+    
+        })
+          
+          
+          
+        }
+      })
+
+    
+
+    
+    }else{
+
+      req.flash('danger', 'Shop Or Customer Does not Exist/Code already in use');
+ 
+      res.redirect('/ship/stockBatch');
+
+
+    
+
+    }
+    
+    })
+    
+    
+    })
+  
+
+
+
+
+
+ 
+router.get('/dispatch2',isLoggedIn,function(req,res){
+  var pro = req.user
+  var customer = req.user.customer
+  var code = req.user.code
+  var shop = req.user.shop
+  console.log(code,'code')
+  if( customer == 'null' || code == 'null' ){
+    res.redirect('/ship/stockBatch')
+  }else{
+
+  
+  
+  var errorMsg = req.flash('danger')[0];
+  var successMsg = req.flash('success')[0];
+  res.render('product/stock3',{pro:pro,code:code,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg,shop:shop,customer:customer})
+}
+})
+
+
+router.post('/dispatch2',isLoggedIn, function(req,res){
+  var pro = req.user
+  var barcodeNumber = req.body.barcodeNumber;
+  var name = req.body.name;
+  var m = moment()
+  var year = m.format('YYYY')
+  var dateValue = m.valueOf()
+  var date = m.toString()
+  var numDate = m.valueOf()
+var month = m.format('MMMM')
+var shop = req.user.shop
+var customer = req.user.customer
+var mformat = m.format("L")
+var code = req.user.code
+  var receiver = req.user.fullname
+  var category = req.body.category
+  var unitCases = req.body.unitCases
+  var casesReceived = req.body.casesReceived
+
+var quantity  = casesReceived * unitCases
+
+  req.check('barcodeNumber','Enter Barcode Number').notEmpty();
+  req.check('name','Enter Product Name').notEmpty();
+  req.check('casesReceived','Enter Number of Cases').notEmpty();
+ 
+  
+
+  
+  
+  var errors = req.validationErrors();
+   
+  if (errors) {
+
+    req.session.errors = errors;
+    req.session.success = false;
+   // res.render('product/stock',{ errors:req.session.errors,pro:pro})
+   req.flash('danger', req.session.errors[0].msg);
+       
+        
+   res.redirect('/ship/dispatcher');
+  
+  }
+  else
+
+ {
+
+  Product.findOne({'name':name})
+  .then(hoc=>{
+
+    if(hoc){
+  var book = new StockD();
+  book.barcodeNumber = barcodeNumber
+  book.category = category
+  book.name = name
+  book.mformat = mformat
+  book.shop =  shop
+  book.customer = customer
+  book.unitCases= unitCases
+  book.code  = code
+  book.status = 'null'
+  book.cases = casesReceived
+
+      
+       
+        book.save()
+          .then(pro =>{
+
+            StockD.find({mformat:mformat,customer:customer,shop:shop,status:'null'},(err, docs) => {
+              let size = docs.length - 1
+              console.log(docs[size],'fff')
+              res.send(docs[size])
+                      })
+        })
+       
+      
+      }
+    }) 
+
+      }
+})
+
+
+    router.post('/stock3',isLoggedIn, (req, res) => {
+      var pro = req.user
+      var customer = req.user.customer
+      var shop = req.user.shop
+      StockD.find({shop:shop,customer:customer,status:'null'},(err, docs) => {
+     
+        res.send(docs)
+                })
+  
+      }); 
+
+
+
+//saveBatch3
+
+router.get('/saveBatch/:id',isLoggedIn, function(req,res){
+  var pro = req.user
+ var receiver = req.user.fullname
+ var code = req.params.id
+ var uid = req.user._id
+var customer = req.user.customer
+var shop = req.user.shop
+var dispatcher = req.user.fullname
+var m2 = moment()
+var wformat = m2.format('L')
+var year = m2.format('YYYY')
+var dateValue = m2.valueOf()
+var date = m2.toString()
+var numDate = m2.valueOf()
+var month = m2.format('MMMM')
+
+
+//var mformat = m.format("L")
+
+
+
+StockD.find({code:code,status:'null'},function(err,locs){
+
+for(var i=0;i<locs.length;i++){
+let barcodeNumber = locs[i].barcodeNumber
+let cases = locs[i].cases
+let quantity = locs[i].cases * locs[i].unitCases
+let date3 = locs[i].mformat
+let m = moment(date3)
+let year = m.format('YYYY')
+let dateValue = m.valueOf()
+let date = m.toString()
+let numDate = m.valueOf()
+let month = m.format('MMMM')
+let idN = locs[i]._id
+
+
+  StockD.findByIdAndUpdate(idN,{$set:{status:'saved'}},function(err,pocs){
+
+  })
+  
+
+  
+
+  Product.findOne({'barcodeNumber':barcodeNumber})
+  .then(hoc=>{
+
+    if(hoc){
+ 
+    
+      var book = new Dispatch();
+      book.barcodeNumber = hoc.barcodeNumber
+      book.category = hoc.category
+      book.name = hoc.name
+      book.customer = customer
+      book.quantityDispatched = quantity
+      book.cases = cases
+      book.unitCases = hoc.unitCases
+      book.casesDispatched = cases
+      book.dispatcher = dispatcher
+      book.casesReceived = 0
+      book.status ='Pending'
+      book.status2 = 'Confirm Delivery'
+      book.status3 = 'No'
+      book.shop = shop
+      book.qtyReceived = 0
+      book.quantityVariance = 0
+      book.dateDispatched = date
+      book.dateDispatchedValue = dateValue
+      book.dateReceived = 'null'
+      book.dateReceivedValue = 'null'
+      book.receiver = 'null'
+      book.rate = 0
+      book.zwl = 0
+      book.price = 0
+      book.mformat = date3
+      book.month = month
+      book.year = year 
+          
+      
+       
+        book.save()
+          .then(pro =>{
+
+            Product.find({barcodeNumber:barcodeNumber},function(err,focs){
+              let idN = focs[0]._id
+               
+              rqty =  focs[0].cases - pro.casesDispatched 
+             let quantity = rqty * focs[0].unitCases
+              Product.findByIdAndUpdate(idN,{$set:{cases:rqty,quantity:quantity}},function(err,vocs){
+ 
+              })
+
+             
+
+            })
+
+console.log(i,'ccc')
+               /*  req.session.message = {
+              type:'success',
+              message:'Product added'
+            }  
+            res.render('product/stock',{message:req.session.message,pro:pro});*/
+          
+        
+        })
+
+       /* req.flash('success', 'Stock Received Successfully');
+        res.redirect('/rec/addStock')*/
+      }  /* else{
+        req.flash('danger', 'Product Does Not Exist');
+      
+        res.redirect('/rec/addStock');
+      }*/
+    }) 
+
+     
+}
+
+User.find({role:'admin'},function(err,ocs){
+  
+  for(var i = 0; i<ocs.length;i++){
+  
+
+
+let id = ocs[i]._id
+var not = new Note();
+not.role = 'dispatcher'
+not.subject = 'Stock Dispatched';
+not.message = "Dispatch made to"+" "+customer+" "+shop+" "+'on'+" "+wformat
+not.status = 'not viewed';
+not.link = 'http://'+req.headers.host+'/viewStockDispatched/'+code;
+not.status1 = 'new';
+not.user = receiver;
+not.type = 'dispatch'
+not.status2 = 'new'
+not.status3 = 'new'
+not.status4 = 'null'
+not.date = m2
+not.dateViewed = 'null'
+not.recId = ocs[i]._id
+not.recRole = 'admin'
+not.senderPhoto = req.user.photo
+not.numDate = numDate
+not.customer = 'null'
+not.shop = 'null'
+
+
+ 
+
+not.save()
+  .then(user =>{
+User.findByIdAndUpdate(uid,{$set:{code:'null',shop:'null',customer:'null'}},function(err,doc){
+
+})
+})
+
+}
+})
+
+
+req.flash('success', 'Stock Dispatched Successfully');
+res.redirect('/ship/stockBatch')
+}) 
+})
+
+
+
+
+
+
+
+router.get('/viewStockDispatched/',isLoggedIn, (req, res) => {
+  var pro = req.user
+  var arr = []
+  var id = req.params.id
+  Discode.find({},(err, docs) => {
+
+    for(var i = docs.length - 1; i>=0; i--){
+
+      arr.push(docs[i])
+    }
+      if (!err) {
+          res.render("product/discodeList", {
+             listX:arr,pro:pro
+            
+          });
+      }
+  });
+  });
+
+ 
+
+ router.get('/viewStockDispatched/:id',isLoggedIn, (req, res) => {
+  var pro = req.user
+  var id = req.params.id
+  console.log(id,'333')
+  StockD.find({code:id},(err, docs) => {
+      if (!err) {
+          res.render("product/productList4", {
+             listX:docs,pro:pro
+            
+          });
+      }
+  });
+  });
+
+
+
 
 
 router.get('/dispatch',isLoggedIn,function(req,res){
   var pro = req.user
+  var errorMsg = req.flash('danger')[0];
   var successMsg = req.flash('success')[0];
   res.render('product/dispatch',{pro:pro,successMsg: successMsg, noMessages: !successMsg})
 })
