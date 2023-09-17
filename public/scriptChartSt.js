@@ -16,14 +16,16 @@ $.ajax({
     var td2 = tr.appendChild(document.createElement('td'));
 	var td3 = tr.appendChild(document.createElement('td'));
 	var td4 = tr.appendChild(document.createElement('td'));
-    var td5= tr.appendChild(document.createElement('td'));
-    td5.appendChild(document.createElement('a'));
+    var link= tr.appendChild(document.createElement('td'));
+    //td5.appendChild(document.createElement('a'));
     td1.id =data[i]._id
     td4.id = data[i]._id
 td2.classList.add('text-end', 'pe-0')
 td3.classList.add('text-end', 'pe-0')
 td4.classList.add('text-end', 'pe-1')
-td5.classList.add('text-end','pe-0')
+link.classList.add('text-end','pe-0')
+link.setAttribute("href", "/rec/delete")
+link.className = "text-end";
 
 /*let link = document.createTextNode("Delete")
 
@@ -34,14 +36,22 @@ td5.appendChild(link);*/
     td2.innerHTML = data[i].category;
     td3.innerHTML = data[i].barcodeNumber;
     td4.innerHTML=data[i].cases;
-    td5.innerHTML = "Delete"
-td5.href="/rec/delete/"+data[i]._id
+    let link2 = "/rec/delete/"+data[i]._id
+
+    //td5.innerHTML = "Delete"
+    var linkText = 'Delete'
+   // link.appendChild(linkText);
+link.href="/rec/delete/"+data[i]._id
     //td5.innerText = 'Delete'
+    link.innerHTML='<a href="'+link2+'">'+linkText+'</a>'
+
+    console.log(link,'33tt')
   
 
     console.log(td4,'yeah')
 
   document.getElementById("kt_ecommerce_report_sales_table").appendChild(tr)
+  //document.getElementById("kt_ecommerce_report_sales_table").appendChild(link)
     //document.getElementById("kt_ecommerce_report_sales_table").appendChild(td5)
     //document.body.prepend(td5)
    }
@@ -233,27 +243,28 @@ function addStudent()
     var td2 = tr.appendChild(document.createElement('td'));
 	var td3 = tr.appendChild(document.createElement('td'));
 	var td4 = tr.appendChild(document.createElement('td'));
-    var td5= tr.appendChild(document.createElement('td'));
+    var link= tr.appendChild(document.createElement('td'));
     td1.id =data._id
     td4.id = data._id
 td2.classList.add('text-end', 'pe-0')
 td3.classList.add('text-end', 'pe-0')
 td4.classList.add('text-end', 'pe-1')
-td5.classList.add('menu-item','px-3')
 
-let link = document.createTextNode("Delete")
 
-td5.appendChild(link);
-td5.title = "Delete"
-td5.href="/rec/delete/"+data._id
+
 
     td1.innerHTML = data.name;
     td2.innerHTML = data.category;
     td3.innerHTML = data.barcodeNumber;
     td4.innerHTML=data.cases;
-    td5.innerHTML = "Delete"
-td5.href="/rec/delete/"+data._id
-    console.log(td4,'yeah')
+    let link2 = "/rec/delete/"+data._id
+
+    //td5.innerHTML = "Delete"
+    var linkText = 'Delete'
+    // link.appendChild(linkText);
+    link.href="/rec/delete/"+data._id
+    //td5.innerText = 'Delete'
+    link.innerHTML='<a href="'+link2+'">'+linkText+'</a>'
 
     document.getElementById("kt_ecommerce_report_sales_table").appendChild(tr)
 

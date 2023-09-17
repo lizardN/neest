@@ -79,9 +79,9 @@ router.post('/', passport.authenticate('local.signin', {
   }else if (req.user.role == 'merchant')
   res.redirect('/merch/userUpdate')
   else if(req.user.role == 'receiver')
-  res.redirect('/rec/addStock')
-  else if(req.user.role == 'dispatcher')
-  res.redirect('/ship/dispatch')
+  res.redirect('/rec/addStock2')
+  /*else if(req.user.role == 'dispatcher')
+  res.redirect('/ship/dispatch')*/
   
 });
 
