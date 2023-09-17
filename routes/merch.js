@@ -162,7 +162,7 @@ router.get('/notUpdate',isLoggedIn,function(req,res){
 
 
 
-router.get('/deliveries',isLoggedIn, activate,function(req,res){
+router.get('/deliveries',isLoggedIn, function(req,res){
     var shop = req.user.shop
     var customer = req.user.customer
 
@@ -230,7 +230,7 @@ router.get('/deliveries',isLoggedIn, activate,function(req,res){
 
 //update subject
 
-router.get('/deliveries/:id', activate,function(req,res){
+router.get('/deliveries/:id', isLoggedIn,function(req,res){
     var pro = req.user
  Dispatch.findById(req.params.id, (err, doc) => {
    if (!err) {
@@ -250,7 +250,7 @@ router.get('/deliveries/:id', activate,function(req,res){
 })
 
 
-router.post('/deliveries/:id',isLoggedIn, activate,  (req, res) => {
+router.post('/deliveries/:id',isLoggedIn,   (req, res) => {
  var pro = req.user
  var m = moment()
  var fullname = req.user.fullname
@@ -287,7 +287,7 @@ if(quantityDispatched == quantityReceived){
 }
 
 console.log(quantityReceived,quantityDispatched,"qtyReceived")
- req.check('name','Enter Name Of Subject').notEmpty();
+ req.check('name','Enter Name Of Product').notEmpty();
  req.check('category','Enter Category').notEmpty();
  req.check('barcodeNumber','Enter Barcode Number').notEmpty();
  req.check('status3','Enter Answer').notEmpty();
@@ -492,7 +492,7 @@ res.redirect('/merch/update')
 
 })*/
 
-router.get('/update',isLoggedIn, activate,function(req,res){
+router.get('/update',isLoggedIn, function(req,res){
   var shop = req.user.shop
   var customer = req.user.customer
   var pro = req.user
@@ -507,7 +507,7 @@ router.get('/update',isLoggedIn, activate,function(req,res){
 })
 
 
-router.post('/update/:id',isLoggedIn,activate,function(req,res){
+router.post('/update/:id',isLoggedIn,function(req,res){
 var id = req.params.id
 var pro = req.user
 var m = moment()
@@ -575,7 +575,7 @@ res.send(doc)
 })
 })
 
-router.get('/stockChange',isLoggedIn,activate,function(req,res){
+router.get('/stockChange',isLoggedIn,function(req,res){
   var shop = req.user.shop
   var customer = req.user.customer
   var pro = req.user
@@ -605,7 +605,7 @@ Sales.find({mformat:mformat},function(err,docs){
 })
 
 
-router.post('/stockChange/:id',isLoggedIn,activate,function(req,res){
+router.post('/stockChange/:id',isLoggedIn,function(req,res){
   var id = req.params.id
   var quantity = req.body.code
   var m = moment()
@@ -636,7 +636,7 @@ ShopStock.findById(id,function(err,doc){
 })
 
 
-router.get('/viewStock',isLoggedIn,activate,function(req,res){
+router.get('/viewStock',isLoggedIn,function(req,res){
     var shop = req.user.shop
     var customer = req.user.customer
     var pro = req.user
@@ -653,7 +653,211 @@ router.get('/viewStock',isLoggedIn,activate,function(req,res){
 
 
 
-router.post('/verifyScan',activate,function(req,res){
+router.get('/flaggedStock',isLoggedIn, function(req,res){
+  var shop = req.user.shop
+  var customer = req.user.customer
+
+  var pro = req.user
+  const arr = []
+const m = moment();
+  var id =req.user._id
+
+ 
+    
+          console.log(req.user._id)
+          console.log(req.user.email)
+            Note.find({recId:req.user._id,customer:customer,shop:shop},function(err,docs){
+              console.log(docs,'docs')
+           for(var i = 0;i<docs.length;i++){
+    
+           
+             let date = docs[i].date
+             let id = docs[i]._id
+             let timeX = moment(date)
+             let timeX2 =timeX.fromNow()
+             console.log(timeX2,'timex2')
+    
+             Note.findByIdAndUpdate(id,{$set:{status4:timeX2}},function(err,locs){
+    
+             
+             
+            // Format relative time using negative value (-1).
+    
+              
+            })
+          }
+    
+          Note.find({recId:req.user._id,status1:'new',customer:customer,shop:shop},function(err,flocs){
+            var les 
+         
+            Note.find({recId:req.user._id,status:'not viewed',customer:customer,shop:shop},function(err,jocs){
+             les = jocs.length > 0
+          
+            for(var i = flocs.length - 1; i>=0; i--){
+        
+              arr.push(flocs[i])
+            }
+         
+  Dispatch.find({shop:shop, customer:customer,status:'Flagged'},(err, mocs) => {
+      if (!err) {
+          res.render("merchant/listF", {
+             listX:mocs, pro:pro,list:arr, les:les
+            
+          });
+      }
+  });
+
+})
+            
+})
+
+})
+
+
+
+})
+
+
+router.get('/flaggedStock/:id',isLoggedIn, function(req,res){
+  var pro = req.user
+Dispatch.findById(req.params.id, (err, doc) => {
+ if (!err) {
+ 
+     res.render("merchant/updateF", {
+        
+         doc: doc,pro:pro
+       
+         
+     });
+   
+ }
+});
+
+
+
+})
+
+
+router.post('/flaggedStock/:id',isLoggedIn,   (req, res) => {
+var pro = req.user
+var m = moment()
+var fullname = req.user.fullname
+var year = m.format('YYYY')
+var month = m.format('MMMM')
+var dateValue = m.valueOf()
+var mformat = m.format("L")
+
+var date = m.toString()
+var id = req.params.id;
+var name = req.body.name;
+var shop = req.user.shop
+var customer = req.user.customer
+var category = req.body.category;
+var barcodeNumber = req.body.barcodeNumber
+var quantityDispatched = req.body.quantityDispatched
+let status3 = req.body.status3
+let status4
+var quantityReceived = req.body.quantityReceived
+var units = req.body.units
+var variance = req.body.quantityVariance
+var cases
+var nVariance
+
+      let reg = /\d+\.*\d*/g;
+
+      let result = quantityReceived.match(reg)
+      let quan = Number(result)
+
+      let reg3 = /\d+\.*\d*/g;
+
+      let result3 = units.match(reg3)
+      let unitsX = Number(result3)
+
+
+      let reg2 = /\d+\.*\d*/g;
+
+      let result2 = variance.match(reg2)
+      let variance2 = Number(result2)
+
+      let reg4 = /\d+\.*\d*/g;
+
+      let result4 = quantityDispatched.match(reg4)
+      let qtyDispatched = Number(result4)
+
+      nVariance = variance2 - unitsX
+      console.log(nVariance,variance2,'444')
+      qtyReceived = quan + unitsX
+//var quantityVariance = quantityReceived - quantityDispatched
+if(nVariance == 0){
+  status3 ="Delivered"
+  status4 = 'yes'
+  console.log('yes')
+}
+
+
+
+console.log(quantityReceived,quantityDispatched,"qtyReceived")
+req.check('name','Enter Name Of Product').notEmpty();
+req.check('category','Enter Category').notEmpty();
+req.check('barcodeNumber','Enter Barcode Number').notEmpty();
+req.check('quantityReceived','Enter Quantity Delivered').notEmpty();
+
+
+ 
+var errors = req.validationErrors();
+
+
+
+if (errors) {
+
+  
+     req.session.errors = errors;
+     req.session.success = false;
+     res.render('merchant/updateF',{ errors:req.session.errors,pro:pro})
+  
+ 
+ }
+
+else
+{
+
+ 
+
+      ShopStock.find({barcodeNumber:barcodeNumber,shop:shop, customer:customer},function(err,docs){
+
+            
+          var  idX  = docs[0]._id
+          console.log(idX)
+          let openingQuantity = docs[0].currentQuantity
+          var xquant = docs[0].currentQuantity + quan
+          console.log(xquant,'xquant')
+          ShopStock.findByIdAndUpdate(idX,{$set:{currentQuantity:xquant,openingQuantity:openingQuantity,stockUpdate:"no"}},function(err,locs){
+
+          })
+      
+     Dispatch.findById(id,function(err,noc){
+       let unitCases = noc.unitCases
+       cases = qtyReceived / unitCases
+      Dispatch.findByIdAndUpdate(id,{$set:{status:status3,status3:status4,qtyReceived:qtyReceived, quantityVariance:nVariance, casesReceived:cases}},function(err,locs){
+if(!err){
+ShopStock.findByIdAndUpdate(idX,{$set:{cases:cases}},function(err,locs){
+
+})
+}
+      })
+    })
+    
+          })
+
+res.redirect('/merch/flaggedStock')
+}
+
+});
+
+
+
+
+router.post('/verifyScan',function(req,res){
   
     var barcodeNumber = req.body.code
      Product.find({barcodeNumber:barcodeNumber},function(err,docs){
@@ -667,7 +871,7 @@ router.post('/verifyScan',activate,function(req,res){
    })
    
 
-   router.post('/verifyScanX',activate,function(req,res){
+   router.post('/verifyScanX',function(req,res){
   
     var barcodeNumber = req.body.code
      Stock.find({barcodeNumber:barcodeNumber},function(err,docs){
@@ -683,7 +887,7 @@ router.post('/verifyScan',activate,function(req,res){
 
 
 
-   router.get('/autocompleteShop/',isLoggedIn,activate, function(req, res, next) {
+   router.get('/autocompleteShop/',isLoggedIn, function(req, res, next) {
 
    
     var regex= new RegExp(req.query["term"],'i');
@@ -734,7 +938,7 @@ router.post('/verifyScan',activate,function(req,res){
   
   // role admin
   //this routes autopopulates teachers info from the id selected from automplet1
-  router.post('/autoShop',isLoggedIn,activate,function(req,res){
+  router.post('/autoShop',isLoggedIn,function(req,res){
     var code = req.body.code
     var userId = req.user._id
   
@@ -754,7 +958,7 @@ router.post('/verifyScan',activate,function(req,res){
 
 
 
-  router.get('/autocompleteCustomer/',isLoggedIn,activate, function(req, res, next) {
+  router.get('/autocompleteCustomer/',isLoggedIn, function(req, res, next) {
 
    
     var regex= new RegExp(req.query["term"],'i');
@@ -805,7 +1009,7 @@ router.post('/verifyScan',activate,function(req,res){
   
   // role admin
   //this routes autopopulates teachers info from the id selected from automplet1
-  router.post('/autoCustomer',isLoggedIn,activate,function(req,res){
+  router.post('/autoCustomer',isLoggedIn,function(req,res){
     var code = req.body.code
   
   
@@ -923,12 +1127,6 @@ function encryptPassword(password) {
     
 
       
-  function activate(req,res,next){
-    if(req.user.status == 'activated'){
-      return next()
-    }
-    res.redirect('/merch/land')
-    }  
-
+ 
       
       
