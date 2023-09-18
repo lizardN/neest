@@ -23,21 +23,33 @@ $.ajax({
 td2.classList.add('text-end', 'pe-0')
 td3.classList.add('text-end', 'pe-0')
 td4.classList.add('text-end', 'pe-1')
-td5.classList.add('text-end','pe-0')
+link.classList.add('text-end','pe-0')
+link.setAttribute("href", "/ship/delete")
+link.className = "text-end"
 
-/*let link = document.createTextNode("Delete")
+let link = document.createTextNode("Delete")
 
-td5.appendChild(link);*/
 
 
     td1.innerHTML = data[i].name;
     td2.innerHTML = data[i].category;
     td3.innerHTML = data[i].barcodeNumber;
     td4.innerHTML=data[i].cases;
-    td5.innerHTML = "Delete"
-td5.href="/ship/delete/"+data[i]._id
+    let link2 = "/ship/delete/"+data[i]._id
+
+    //td5.innerHTML = "Delete"
+    var linkText = 'Delete'
+   // link.appendChild(linkText);
+
     //td5.innerText = 'Delete'
-  
+    link.innerHTML='<a href="'+link2+'">'+linkText+'</a>'
+
+
+
+/*let link = document.createTextNode("Delete")
+
+td5.appendChild(link);*/
+
 
     console.log(td4,'yeah')
 
@@ -233,25 +245,33 @@ function addStudent()
     var td2 = tr.appendChild(document.createElement('td'));
 	var td3 = tr.appendChild(document.createElement('td'));
 	var td4 = tr.appendChild(document.createElement('td'));
-    var td5= tr.appendChild(document.createElement('td'));
+    var link= tr.appendChild(document.createElement('td'));
     td1.id =data._id
     td4.id = data._id
 td2.classList.add('text-end', 'pe-0')
 td3.classList.add('text-end', 'pe-0')
 td4.classList.add('text-end', 'pe-1')
-td5.classList.add('menu-item','px-3')
+link.classList.add('text-end','pe-0')
+link.setAttribute("href", "/ship/delete")
+link.className = "text-end"
 
 let link = document.createTextNode("Delete")
 
-td5.appendChild(link);
-td5.title = "Delete"
-td5.href="/ship/delete/"+data._id
+
 
     td1.innerHTML = data.name;
     td2.innerHTML = data.category;
     td3.innerHTML = data.barcodeNumber;
     td4.innerHTML=data.cases;
-    td5.innerHTML = "Delete"
+    let link2 = "/ship/delete/"+data._id
+
+    //td5.innerHTML = "Delete"
+    var linkText = 'Delete'
+   // link.appendChild(linkText);
+
+    //td5.innerText = 'Delete'
+    link.innerHTML='<a href="'+link2+'">'+linkText+'</a>'
+
 
     console.log(td4,'yeah')
 
