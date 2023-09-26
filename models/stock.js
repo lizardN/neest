@@ -6,6 +6,7 @@ var schema = new Schema({
     barcodeNumber:{type:String, required:true},
     name: {type: String, required:true },
     category: { type: String, required:true },
+    subCategory: { type: String, required:true },
     quantity: {type: Number, required: true},
     date: {type: String, required: true},
     stockUpdate: {type: String, required: true},

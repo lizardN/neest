@@ -174,6 +174,7 @@ var mformat = m.format("L")
 var code = req.user.code
   var receiver = req.user.fullname
   var category = req.body.category
+  var subCategory = req.body.subCategory
   var unitCases = req.body.unitCases
   var casesReceived = req.body.casesReceived
 
@@ -211,6 +212,7 @@ var quantity  = casesReceived * unitCases
   var book = new StockD();
   book.barcodeNumber = barcodeNumber
   book.category = category
+  book.subCategory = subCategory
   book.name = name
   book.mformat = mformat
   book.shop =  shop
@@ -308,6 +310,7 @@ let idN = locs[i]._id
       var book = new Dispatch();
       book.barcodeNumber = hoc.barcodeNumber
       book.category = hoc.category
+      book.subCategory = hoc.subCategory
       book.name = hoc.name
       book.customer = customer
       book.quantityDispatched = quantity
@@ -1239,6 +1242,14 @@ let message = tocs[0].message
 })
 
 
+router.get('/delete/:id',isLoggedIn, (req, res) => {
+  StockD.findByIdAndRemove(req.params.id, (err, doc) => {
+    if (!err) {
+        res.redirect('/ship/dispatch2');
+    }
+    else { console.log('Error in deleting stock :' + err); }
+  });
+  });
 
    
 

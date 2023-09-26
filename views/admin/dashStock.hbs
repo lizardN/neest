@@ -2061,7 +2061,7 @@
 											<div class="card-header pt-7">
 							<!--begin::Title-->
 							<h3 class="card-title align-items-start flex-column">
-								<span class="card-label fw-bolder text-gray-800">Stock (Product) Stats Across Customer Stores</span>
+								<span class="card-label fw-bolder text-gray-800">Stock (SubCategory) Stats Across Customer Stores</span>
 								
 							</h3>
 							<!--end::Title-->
@@ -2106,7 +2106,7 @@
                     
                 },
                 type: 'POST',
-                url: "/fillX",
+                url: "/fillSubX",
                 success: function(data) {
                for(var i = 0;i < data.length; i++){
                opts += "<option value='"+data[i].name+"'>"+data[i].name+"</option>"
@@ -2133,7 +2133,7 @@
 										
 
 <div class="container">
-										<input type="text"  id="productName5" name="productName5" autocomplete="off" class="form-control form-control-lg form-control-solid" placeholder="Products" list="names5" />
+										<input type="text"  id="productName5" name="productName5" autocomplete="off" class="form-control form-control-lg form-control-solid" placeholder="SubCategory" list="names5" />
 									
 
 	                             <datalist id="names5">
@@ -2442,6 +2442,220 @@
 			</div>
 			<!--end::Page-->
 		</div>
+
+
+
+
+					<!--begin::Card widget 8-->
+												<div class="card card-flush h-xl-100">
+											<!--begin::Header-->
+											<div class="card-header pt-7">
+							<!--begin::Title-->
+							<h3 class="card-title align-items-start flex-column">
+								<span class="card-label fw-bolder text-gray-800">Stock (Actual Product) Across Stores</span>
+								
+							</h3>
+							<!--end::Title-->
+								<div class="d-flex align-items-center position-relative my-1">
+												<!--begin::Svg Icon | path: icons/duotune/general/gen021.svg--
+												<span class="svg-icon svg-icon-1 position-absolute ms-4">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+														<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+													</svg>
+												</span>
+												<!--end::Svg Icon-->
+			
+
+												<select name="category9" id="category9"   class="form-control form-control-solid w-100px ps-1" onclick="ClickX0(value)" >
+                        <option value="Select Category">SubCategory</option>
+						<!--  {{#each arr}}
+                                                               <option  value="{{this.name}}">{{this.name}}</option>
+                                                                     {{/each}}-->
+                                                                                 {{#each arr1}}
+                                                               <option value="{{this.name}}">{{this.name}}</option>
+                                                                     {{/each}}
+                                                                
+                                                                
+                                                                
+																				<!--<option value="sahwira-wear">Work Wear</option>-->
+															
+							
+															
+							
+												
+											</select>
+											<script>
+                                                function ClickX0(value){
+                                                    console.log( value)
+													document.getElementById('productName9').list = ''
+													    document.getElementById('productName9').value = ''
+														document.getElementById('names9').innerHTML = ''
+                                                    var opts = "<option value=''>select</option>";
+                                                     $.ajax({
+                dataType: 'json',
+                data: {
+                    value: value,
+                    
+                },
+                type: 'POST',
+                url: "/fillX",
+                success: function(data) {
+               for(var i = 0;i < data.length; i++){
+               opts += "<option value='"+data[i].name+"'>"+data[i].name+"</option>"
+              
+               }
+             
+                
+                
+          document.getElementById('names9').innerHTML = opts
+           
+                 
+                 
+                 
+          
+                }
+               
+            });
+ 
+                                                }
+                                            </script>
+
+
+											
+										
+
+<div class="container">
+										<input type="text"  id="productName9" name="productName9" autocomplete="off" class="form-control form-control-lg form-control-solid" placeholder="Products" list="names9" />
+									
+
+	                             <datalist id="names9">
+                                                       
+                                                        
+                                                    
+                                                            </datalist>
+																
+	
+											
+	
+</div>
+
+															</div>
+							<!--begin::Toolbar-->
+							
+							<!--end::Toolbar-->
+						</div>
+						<!--end::Header-->
+						<!--begin::Body-->
+						<div class="card-body d-flex flex-column justify-content-between pb-5">
+							<!--begin::Nav-->
+							<ul class="nav nav-pills nav-pills-custom mb-3">
+								<!--begin::Item-->
+								 {{#each listX}}
+								<li class="nav-item mb-3 me-3 me-lg-6">
+									<!--begin::Link-->
+									<a class="nav-link btn btn-outline btn-flex btn-active-color-primary flex-column overflow-hidden w-80px h-85px pt-5 pb-2 " data-bs-toggle="pill" id="myChart5tabX" href="#myChart5tabContent" onclick="ClickX4('{{this.name}}')">
+										<!--begin::Icon-->
+										<div class="nav-icon mb-3">
+											
+										</div>
+										<!--end::Icon-->
+										<!--begin::Title-->
+										<span id="cust" onclick="'{{this.name}}'"  class="nav-text text-gray-800 fw-bolder fs-6 lh-1">{{this.code}}</span>
+										<!--end::Title-->
+										<!--begin::Bullet-->
+										<span class="bullet-custom position-absolute bottom-0 w-100 h-4px bg-primary"></span>
+										<!--end::Bullet-->
+									</a>
+									<!--end::Link-->
+								</li>
+								<!--end::Item-->
+								<!--begin::Item-->
+							
+								{{/each}}
+							
+								<!--end::Item-->
+							</ul>
+							<!--end::Nav-->
+							<!--begin::Tab Content-->
+							<div class="tab-content">
+								<!--begin::Tap pane-->
+								<div class="tab-pane fade active show" id="myChart5tabContent">
+									<!--begin::Chart-->
+									<div id="myChart5X" class="min-h-auto" style="height: 270px"></div>
+									<!--end::Chart-->
+								</div>
+								<!--end::Tap pane-->
+								<!--begin::Tap pane-->
+								<div class="tab-pane fade" id="myChart6tabContent">
+									<!--begin::Chart-->
+									<div id="myChart6X" class="min-h-auto" style="height: 270px"></div>
+									<!--end::Chart-->
+								</div>
+								<!--end::Tap pane-->
+								<!--begin::Tap pane-->
+								<div class="tab-pane fade" id="myChart7tabContent">
+									<!--begin::Chart-->
+									<div id="myChart7X" class="min-h-auto" style="height: 270px"></div>
+									<!--end::Chart-->
+								</div>
+								<!--end::Tap pane-->
+								<!--begin::Tap pane-->
+								<div class="tab-pane fade" id="myChart8tabContent">
+									<!--begin::Chart-->
+									<div id="myChart8X" class="min-h-auto" style="height: 270px"></div>
+									<!--end::Chart-->
+								</div>
+
+								<div class="tab-pane fade" id="myChart9tabContent">
+									<!--begin::Chart-->
+									<div id="myChart9X" class="min-h-auto" style="height: 270px"></div>
+									<!--end::Chart-->
+								</div>
+
+								<div class="tab-pane fade" id="myChartXtabContent">
+									<!--begin::Chart-->
+									<div id="myChartX" class="min-h-auto" style="height: 270px"></div>
+									<!--end::Chart-->
+								</div>
+
+								<div class="tab-pane fade" id="myChartXItabContent">
+									<!--begin::Chart-->
+									<div id="myChartXI" class="min-h-auto" style="height: 270px"></div>
+									<!--end::Chart-->
+								</div>
+
+
+								<div class="tab-pane fade" id="myChartXIItabContent">
+									<!--begin::Chart-->
+									<div id="myChartXII" class="min-h-auto" style="height: 270px"></div>
+									<!--end::Chart-->
+								</div>
+								
+								<!--end::Tap pane-->
+							</div>
+							<!--end::Tab Content-->
+						</div>
+						<!--end: Card Body-->
+											</div>
+
+											
+							
+
+							
+
+
+
+							
+	
+
+							
+								<!--end::Modal - New Product-->
+								<!--begin::Modal - New Product-->
+							
+								<!--end::Modal - New Product-->
+								<!--end::Modals-->
+							</div>
 		<!--end::Root-->
 		<!--begin::Drawers-->
 		<!--begin::Activities drawer-->

@@ -9,7 +9,7 @@ var schema = new Schema({
     qty: {type: Number, required: true},
     code: {type: String, required: true},
 
-
+    subCategory: { type: String, required:true },
     category: {type: String, required: true}
 });
 

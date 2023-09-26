@@ -36,7 +36,7 @@ td5.appendChild(link);*/
     td2.innerHTML = data[i].category;
     td3.innerHTML = data[i].barcodeNumber;
     td4.innerHTML=data[i].qtyReturned;
-    let link2 = "/ship/delete/"+data[i]._id
+    let link2 = "/deleteR/"+data[i]._id
 
     //td5.innerHTML = "Delete"
     var linkText = 'Delete'
@@ -223,12 +223,13 @@ function addStudent()
 	var barcodeNumber=document.sample.barcodeNumber.value;
     var qtyReturned = document.sample.qtyReturned.value;
     var category=document.sample.category.value;
+    var subCategory=document.sample.subCategory.value;
   
 	$.ajax({
    
     dataType: 'json',
     type: 'POST',
-	data:{barcodeNumber:barcodeNumber,name:name,qtyReturned:qtyReturned,category:category },
+	data:{barcodeNumber:barcodeNumber,name:name,qtyReturned:qtyReturned,subCategory:subCategory,category:category },
     url: "/returns",
     success: function(data) {
     console.log(data)
@@ -252,14 +253,14 @@ link.classList.add('text-end','pe-0')
 link.setAttribute("href", "/delete")
 link.className = "text-end"
 
-let link = document.createTextNode("Delete")
+
 
 
     td1.innerHTML = data.name;
     td2.innerHTML = data.category;
     td3.innerHTML = data.barcodeNumber;
     td4.innerHTML=data.qtyReturned;
-    let link2 = "/delete/"+data._id
+    let link2 = "/deleteR/"+data._id
 
     //td5.innerHTML = "Delete"
     var linkText = 'Delete'

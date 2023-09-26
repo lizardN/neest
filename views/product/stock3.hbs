@@ -941,6 +941,7 @@
 														<!--end::Label-->
 														<!--begin::Image input wrapper-->
 														<input type="hidden" name="unitCases" id="unitCases">
+														<input type="hidden" name="subCategory" id="subCategory">
 													<!--end::Input group-->
 																<!--begin::Row-->
 													<div class="row row-cols-1 row-cols-sm-3 rol-cols-md-3 row-cols-lg-3">
@@ -1110,7 +1111,7 @@
 													   <!-- <button  class="btn btn-light me-3" ><a href="/batchContract" >Change Farmer</a></button>
 														<!--end::Button-->
 														<!--begin::Button-->
-														<a onclick="addStudent()" class="btn btn-primary" >Dispatch Stock</a>
+														<a onclick="dispatch()" class="btn btn-primary" >Dispatch Stock</a>
 														<!--<button  class="btn btn-primary" onclick="addStudent()">
 															<span class="indicator-label">Add Stock</span>
 															<span class="indicator-progress">Please wait...
@@ -1328,6 +1329,8 @@
 				 $("#availableCases").val(data.cases)
 
 				$("#unitCases").val(data.unitCases)
+
+					$("#subCategory").val(data.subCategory)
                 
                
                  

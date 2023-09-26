@@ -3,9 +3,12 @@ var router = express.Router();
 var User = require('../models/user');
 var Cart = require('../models/cart');
 var Dispatch = require('../models/dispatch');
+var Discode = require('../models/dispatchCode');
 var Truck = require('../models/truck');
 var StockV = require('../models/stockV');
+var StockD = require('../models/stockD');
 var Category = require('../models/category');
+var SubCategory = require('../models/subCategory');
 var Customer = require('../models/customer');
 var nodemailer = require('nodemailer');
 var Product = require('../models/product');
@@ -1270,6 +1273,40 @@ arr.push(docs[i])
 
 
 
+router.post('/dashChartStockSub',isLoggedIn,function(req,res){
+
+  var category = req.body.category
+
+ var date = req.body.date
+ var arr = []
+ var id = req.user._id
+ let num = req.user.num
+ num++
+ 
+
+
+ Product.find({category:category},function(err,docs) {
+  // console.log(docs,'docs')
+   for(var i = 0;i<docs.length;i++){
+
+
+      if(arr.length > 0 && arr.find(value => value.subCategory == docs[i].subCategory)){
+             console.log('true')
+            arr.find(value => value.subCategory == docs[i].subCategory).cases += docs[i].cases;
+       }else{
+arr.push(docs[i])
+       }
+
+     
+   }
+  // console.log(arr,'arr')
+  res.send(arr)
+ })
+
+})
+
+
+
 
 router.post('/dashChartStockXI',isLoggedIn,function(req,res){
 
@@ -1576,7 +1613,7 @@ arr.push(docs[i])
 
 router.post('/dashChartStock2',isLoggedIn,function(req,res){
   var customer = req.body.customer
-  var product = req.body.product
+  var product = req.body.subCategory
   var category = req.body.category
 
 
@@ -1587,7 +1624,7 @@ router.post('/dashChartStock2',isLoggedIn,function(req,res){
   
   
 
-  ShopStock.find({category:category,name:product,customer:customer},function(err,docs) {
+  ShopStock.find({category:category,subCategory:product,customer:customer},function(err,docs) {
    // console.log(docs,'docs')
     for(var i = 0;i<docs.length;i++){
 
@@ -1609,6 +1646,38 @@ arr.push(docs[i])
 
 
 
+router.post('/dashChartStock2X',isLoggedIn,function(req,res){
+  var customer = req.body.customer
+  var product = req.body.product
+  var category = req.body.category
+
+
+  var arr = []
+  var id = req.user._id
+  let num = req.user.num
+  num++
+  
+  
+
+  ShopStock.find({category:category,product:product,customer:customer},function(err,docs) {
+   // console.log(docs,'docs')
+    for(var i = 0;i<docs.length;i++){
+
+    
+       if(arr.length > 0 && arr.find(value => value.shop == docs[i].shop)){
+              console.log('true')
+             arr.find(value => value.shop == docs[i].shop).currentQuantity += docs[i].currentQuantity;
+        }else{
+arr.push(docs[i])
+        }
+
+      
+    }
+   // console.log(arr,'arr')
+   res.send(arr)
+  })
+
+})
 
 router.post('/dashStockStore',isLoggedIn,function(req,res){
   var customer = req.body.customer
@@ -2739,6 +2808,41 @@ router.post('/fill',function(req,res){
     })
     
   
+
+    
+  router.post('/fillSub',function(req,res){
+
+    console.log(req.body.value)
+        var category = req.body.value
+    SubCategory.find({category:category},function(err,docs){
+    
+        if(docs == undefined){
+            res.redirect('/')
+           }else
+          
+             res.send(docs)
+    
+    })
+    
+    })
+
+
+    
+  router.post('/fillSubX',function(req,res){
+
+    console.log(req.body.value)
+        var category = req.body.value
+    SubCategory.find({category:category},function(err,docs){
+    
+        if(docs == undefined){
+            res.redirect('/')
+           }else
+          
+             res.send(docs)
+    
+    })
+    
+    })
 
 /*router.post('/salesX',isLoggedIn,function(req,res){
 var customer = req.body.customer
@@ -4489,7 +4593,8 @@ else{
  req.body.price = record.price  
  req.body.barcodeNumber = record.barcodeNumber
  req.body.zwl = record.zwl
- req.body.category = record.category  
+ req.body.category = record.category 
+ req.body.subCategory = record.subCategory 
  req.body.rate = record.rate
  req.body.quantity = record.quantity
  req.body.unitCases = record.unitCases
@@ -4543,6 +4648,7 @@ else{
                    product.quantity = req.body.quantity;
                    product.rate = req.body.rate;
                    product.category= req.body.category;
+                   product.subCategory= req.body.subCategory;
                    product.zwl = req.body.zwl;
                    product.cases = req.body.cases
                    product.unitCases = req.body.unitCases
@@ -4598,7 +4704,179 @@ else{
    })
    
  
+ //import sub Category
  
+
+
+ router.get('/importSub',isLoggedIn,function(req,res){
+  var pro = req.user
+      var successMsg = req.flash('success')[0];
+   res.render('product/importsub',{pro:pro,successMsg: successMsg, noMessages: !successMsg})
+ })
+ 
+
+ 
+ router.post('/importSub', isLoggedIn,upload.single('file'),  (req,res)=>{
+  var pro = req.user
+ 
+   if(!req.file){
+      /* req.session.message = {
+         type:'errors',
+         message:'Select File!'
+       }     
+         res.render('product/imports', {message:req.session.message}) */
+
+         console.log('ma1')
+         req.flash('success','Select File');
+        
+ 
+         res.redirect('/importSub');
+       }else if (req.file.mimetype !== 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'){
+          /* req.session.message = {
+               type:'errors',
+               message:'Upload Excel File'
+             }     
+               res.render('product/imports', {message:req.session.message,pro:pro
+                    
+                }) */
+                console.log('ma1')
+                req.flash('success', 'Upload excel file');
+               
+              
+                res.redirect('/importSub');
+ 
+ 
+ 
+       }
+         
+       else{
+    
+
+       
+           const file = req.file.filename;
+   
+           
+                var wb =  xlsx.readFile('./public/uploads/' + file)
+        
+                var sheets = wb.Sheets;
+                var sheetNames = wb.SheetNames;
+    
+                var sheetName = wb.SheetNames[0];
+    var sheet = wb.Sheets[sheetName ];
+    
+       for (var i = 0; i < wb.SheetNames.length; ++i) {
+        var sheet = wb.Sheets[wb.SheetNames[i]];
+    
+        console.log(wb.SheetNames.length)
+        var data =xlsx.utils.sheet_to_json(sheet)
+            
+        var newData = data.map(async function (record){
+    
+       
+      
+     
+         
+        
+
+
+         
+
+req.body.name = record.name     
+
+req.body.category = record.category 
+
+
+          
+
+           
+       
+          // try{
+      
+             req.check('name','Enter Name').notEmpty();
+       
+             req.check('category','Enter Category').notEmpty();
+          
+           
+            
+          
+
+
+             var errors = req.validationErrors();
+ 
+             if (errors) {
+               
+               req.session.errors = errors;
+               req.session.success = false;
+               for(let x=0;x<req.session.errors.length;x++){
+                // throw new SyntaxError(req.session.errors[x].msg +" "+"on line")
+                 req.flash('success', req.session.errors[x].msg);
+                  
+
+                 res.redirect('/importSub');
+               }
+             
+         }
+
+
+     else{
+
+     
+       
+         var product = new SubCategory();
+                 product.name = req.body.name;
+                
+                 product.category= req.body.category;
+            
+                 
+           
+               
+                
+                 product.save()
+                   .then(productId =>{
+                    console.log('ma1')
+                    /*req.flash('success', 'Upload Successfull');
+                   
+       
+                    res.redirect('/import');*/
+                     
+                  
+                   })
+            
+                    
+                  
+                 }  
+                   // .catch(err => console.log(err))
+               //  }
+               /*  catch(e){
+                   //res.send(e.message)
+
+                
+                  }*/
+                   })
+                 
+                  
+        
+                 }
+                 
+                 
+                   
+                   
+       
+                  
+       
+                 req.flash('success', 'Upload Successfull');
+                   
+       
+                 res.redirect('/importSub');                  
+            
+               }
+     
+       
+ 
+ 
+ })
+ 
+
  //returns
  
 
@@ -4726,7 +5004,7 @@ var mformat = m.format("L")
 var code = req.user.code
   var receiver = req.user.fullname
   var category = req.body.category
-  
+  var subCategory= req.body.subCategory
   var qtyReturned = req.body.qtyReturned
 
 
@@ -4763,6 +5041,7 @@ var code = req.user.code
   var book = new StockR();
   book.barcodeNumber = barcodeNumber
   book.category = category
+  book.subCategory = subCategory
   book.name = name
   book.mformat = mformat
   book.shop =  shop
@@ -4806,7 +5085,15 @@ router.post('/stock3',isLoggedIn, (req, res) => {
 
 
 
-
+  router.get('/deleteR/:id',isLoggedIn, (req, res) => {
+    StockR.findByIdAndRemove(req.params.id, (err, doc) => {
+      if (!err) {
+          res.redirect('/returns');
+      }
+      else { console.log('Error in deleting stock :' + err); }
+    });
+    });
+  
 
 
 

@@ -224,12 +224,13 @@ function addStudent()
 	var barcodeNumber=document.sample.barcodeNumber.value;
     var casesReceived = document.sample.casesReceived.value;
     var category=document.sample.category.value;
+    var subCategory=document.sample.subCategory.value;
     var unitCases=document.sample.unitCases.value;
 	$.ajax({
    
     dataType: 'json',
     type: 'POST',
-	data:{barcodeNumber:barcodeNumber,name:name,casesReceived:casesReceived,category:category,unitCases:unitCases },
+	data:{barcodeNumber:barcodeNumber,name:name,casesReceived:casesReceived,category:category,subCategory:subCategory,unitCases:unitCases },
     url: "/rec/addStock2",
     success: function(data) {
     console.log(data)
@@ -249,6 +250,9 @@ function addStudent()
 td2.classList.add('text-end', 'pe-0')
 td3.classList.add('text-end', 'pe-0')
 td4.classList.add('text-end', 'pe-1')
+link.classList.add('text-end','pe-0')
+link.setAttribute("href", "/rec/delete")
+link.className = "text-end";
 
 
 

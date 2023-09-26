@@ -265,6 +265,7 @@ router.post('/deliveries/:id',isLoggedIn,   (req, res) => {
  var shop = req.user.shop
  var customer = req.user.customer
  var category = req.body.category;
+ var subCategory = req.body.subCategory;
  var barcodeNumber = req.body.barcodeNumber
  var quantityDispatched = req.body.quantityDispatched
  let status3 = req.body.status3
@@ -326,6 +327,7 @@ else
                     pass.barcodeNumber = barcodeNumber;
                     pass.name = name
                     pass.category= category;
+                    pass.subCategory= subCategory;
                     pass.date = date
                     pass.dateValue = dateValue
                     pass.updateDate='null'
@@ -523,6 +525,7 @@ ShopStock.findById(id,function(err,doc){
 let customer = doc.customer
 let productName = doc.name
 let category = doc.category
+let subCategory = doc.subCategory
 let shop = doc.shop
 let barcodeNumber = doc.barcodeNumber
 
@@ -543,6 +546,7 @@ let barcodeNumber = doc.barcodeNumber
 var sale = new Sales()
 sale.productName = productName
 sale.category = category
+sale.subCategory = subCategory
 sale.barcodeNumber = barcodeNumber
 sale.qty = sales
 sale.date = date
