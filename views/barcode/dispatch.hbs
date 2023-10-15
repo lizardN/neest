@@ -855,7 +855,11 @@
                  $("#barcodeNumber").val(scanned_barcode)
                  $("#name").val('')
                  $("#category").val('')
-				  $("#quantity").val('')
+	             $("#availableCases").val('')
+
+				$("#unitCases").val('')
+
+					$("#subCategory").val('')
                  
                
                 }
@@ -863,7 +867,11 @@
                     $("#barcodeNumber").val(data.barcodeNumber)
                    $("#name").val(data.name)
                  $("#category").val(data.category)
-				   $("#quantity").val(data.quantity)
+				 $("#availableCases").val(data.cases)
+
+				$("#unitCases").val(data.unitCases)
+
+					$("#subCategory").val(data.subCategory)
                
                 
                 
@@ -897,14 +905,15 @@
             <strong>{{message.intro}}</strong>{{message.message}}
         </div>
         {{/if}}
-												<form id="kt_ecommerce_settings_general_form" class="form" method="post" action="/ship/dispatch" >
+												<form id="kt_ecommerce_settings_general_form" class="form"  autocomplete="off" name="sample" >
 													<!--begin::Input group-->
 													<div class="mb-7">
 														<!--begin::Label-->
 													
 														<!--end::Label-->
 														<!--begin::Image input wrapper-->
-														
+														<input type="hidden" name="unitCases" id="unitCases">
+														<input type="hidden" name="subCategory" id="subCategory">
 													<!--end::Input group-->
 																<!--begin::Row-->
 													<div class="row row-cols-1 row-cols-sm-3 rol-cols-md-3 row-cols-lg-3">
@@ -914,12 +923,12 @@
 															<div class="fv-row mb-7">
 																<!--begin::Label-->
 																<label class="fs-6 fw-bold form-label mt-3">
-																	<span class="required">Barcode Number</span>
+																	<span class="required">Product Name</span>
 																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" ></i>
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="text" class="form-control form-control-solid" name="barcodeNumber" id="barcodeNumber" value="" readonly  />
+																<input type="text" class="form-control form-control-solid" name="name" id="name" value=""   />
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
@@ -930,12 +939,12 @@
 															<div class="fv-row mb-7">
 																<!--begin::Label-->
 																<label class="fs-6 fw-bold form-label mt-3">
-																	<span class="required">Product Name</span>
+																	<span class="required">Barcode Number</span>
 																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" ></i>
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="text" class="form-control form-control-solid" name="name" id="name" value="" readonly />
+																<input type="text" class="form-control form-control-solid" name="barcodeNumber" id="barcodeNumber" value="" readonly />
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
@@ -968,34 +977,36 @@
 															<div class="fv-row mb-7">
 																<!--begin::Label-->
 																<label class="fs-6 fw-bold form-label mt-3">
-																	<span class="required">Quantity</span>
+																	<span class="required">Available Cases</span>
 																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" ></i>
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="number" class="form-control form-control-solid" name="quantity" id="quantity" value=""  />
+																<input type="text" class="form-control form-control-solid" name="availableCases" id="availableCases" value=""  />
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
 														</div>
 														<!--end::Col-->
-																											<div class="col">
+															
+
+	<div class="col">
 															<!--begin::Input group-->
 															<div class="fv-row mb-7">
 																<!--begin::Label-->
 																<label class="fs-6 fw-bold form-label mt-3">
-																	<span class="required">Quantity To Be Dispatched</span>
+																	<span class="required">Enter Cases</span>
 																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" ></i>
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="number" class="form-control form-control-solid" name="dispatchedQty" id="dispatchedQty" value=""  />
+																<input type="number" class="form-control form-control-solid" name="casesReceived" id="casesReceived" value=""  />
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
 														</div>
-														<!--end::Col-->
-															<div class="col">
+
+	<div class="col">
 															<!--begin::Input group-->
 															<div class="fv-row mb-7">
 																<!--begin::Label-->
@@ -1005,7 +1016,7 @@
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="text" class="form-control form-control-solid" name="customer" id="customer" value=""  />
+																<input type="text" class="form-control form-control-solid" name="customer" id="customer" value="{{customer}}"  />
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
@@ -1027,13 +1038,32 @@
 																</label>
 																<!--end::Label-->
 																<!--begin::Input-->
-																<input type="text" class="form-control form-control-solid" name="shopName" id="shopName" value=""  />
+																<input type="text" class="form-control form-control-solid" name="shop" id="shop" value="{{shop}}"  />
 																<!--end::Input-->
 															</div>
 															<!--end::Input group-->
 														</div>
 														<!--end::Col-->
+
+																<div class="col">
+															<!--begin::Input group-->
+															<div class="fv-row mb-7">
+																<!--begin::Label-->
+																<label class="fs-6 fw-bold form-label mt-3">
+																	<span class="required">Dispatch Code</span>
+																	<i class="fas fa-exclamation-circle ms-1 fs-7" data-bs-toggle="tooltip" ></i>
+																</label>
+																<!--end::Label-->
+																<!--begin::Input-->
+																<input type="text" class="form-control form-control-solid" name="code" id="code" value="{{code}}"  />
+																<!--end::Input-->
+															</div>
+															<!--end::Input group-->
+														</div>
 													</div>
+														
+												
+														
 														
 												
 
@@ -1049,12 +1079,13 @@
 													<!--begin::Action buttons-->
 													<div class="d-flex justify-content-end">
 														<!--begin::Button-->
-														<button type="reset" data-kt-contacts-type="cancel" class="btn btn-light me-3">Cancel</button>
+														 <button  class="btn btn-light me-3" ><a href="/ship/stockBatch" >Change  Code</a></button>
 													   <!-- <button  class="btn btn-light me-3" ><a href="/batchContract" >Change Farmer</a></button>
 														<!--end::Button-->
 														<!--begin::Button-->
-														<button type="submit" class="btn btn-primary" >
-															<span class="indicator-label">Dispatch</span>
+														<a onclick="dispatch()" class="btn btn-primary" >Dispatch Stock</a>
+														<!--<button  class="btn btn-primary" onclick="addStudent()">
+															<span class="indicator-label">Add Stock</span>
 															<span class="indicator-progress">Please wait...
 															<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
 														</button>
@@ -1070,11 +1101,121 @@
 										<!--end::Contacts-->
 									</div>
 									<!--end::Content-->
+
+									
 								</div>
 
 
+<br>
 
+							<!--begin::Container-->
+			
+								<!--begin::Products-->
+								<div class="card card-flush">
+									<!--begin::Card header-->
+									<div class="card-header align-items-center py-5 gap-2 gap-md-5">
+										<!--begin::Card title-->
+										<div class="card-title">
+											<!--begin::Search-->
+											<div class="d-flex align-items-center position-relative my-1">
+												<!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+												<span class="svg-icon svg-icon-1 position-absolute ms-4">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+														<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+													</svg>
+												</span>
+												<!--end::Svg Icon-->
+												<input type="text" data-kt-ecommerce-order-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search Report" />
+											</div>
+											<!--end::Search-->
+											<!--begin::Export buttons-->
+											<div id="kt_ecommerce_report_sales_export" class="d-none"></div>
+											<!--end::Export buttons-->
+										</div>
+										<!--end::Card title-->
+										<!--begin::Card toolbar-->
+										<div class="card-toolbar flex-row-fluid justify-content-end gap-5">
+											<!--begin::Daterangepicker-->
+											<input class="form-control form-control-solid w-100 mw-250px" placeholder="Pick date range" id="kt_ecommerce_report_sales_daterangepicker" />
+											<!--end::Daterangepicker-->
+											<!--begin::Export dropdown-->
+											<button type="button" class="btn btn-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+											<!--begin::Svg Icon | path: icons/duotune/arrows/arr078.svg-->
+											<span class="svg-icon svg-icon-2">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+													<rect opacity="0.3" x="12.75" y="4.25" width="12" height="2" rx="1" transform="rotate(90 12.75 4.25)" fill="black" />
+													<path d="M12.0573 6.11875L13.5203 7.87435C13.9121 8.34457 14.6232 8.37683 15.056 7.94401C15.4457 7.5543 15.4641 6.92836 15.0979 6.51643L12.4974 3.59084C12.0996 3.14332 11.4004 3.14332 11.0026 3.59084L8.40206 6.51643C8.0359 6.92836 8.0543 7.5543 8.44401 7.94401C8.87683 8.37683 9.58785 8.34458 9.9797 7.87435L11.4427 6.11875C11.6026 5.92684 11.8974 5.92684 12.0573 6.11875Z" fill="black" />
+													<path d="M18.75 8.25H17.75C17.1977 8.25 16.75 8.69772 16.75 9.25C16.75 9.80228 17.1977 10.25 17.75 10.25C18.3023 10.25 18.75 10.6977 18.75 11.25V18.25C18.75 18.8023 18.3023 19.25 17.75 19.25H5.75C5.19772 19.25 4.75 18.8023 4.75 18.25V11.25C4.75 10.6977 5.19771 10.25 5.75 10.25C6.30229 10.25 6.75 9.80228 6.75 9.25C6.75 8.69772 6.30229 8.25 5.75 8.25H4.75C3.64543 8.25 2.75 9.14543 2.75 10.25V19.25C2.75 20.3546 3.64543 21.25 4.75 21.25H18.75C19.8546 21.25 20.75 20.3546 20.75 19.25V10.25C20.75 9.14543 19.8546 8.25 18.75 8.25Z" fill="#C4C4C4" />
+												</svg>
+											</span>
+											<!--end::Svg Icon-->Export Report</button>
+											<!--begin::Menu-->
+											<div id="kt_ecommerce_report_sales_export_menu" class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-200px py-4" data-kt-menu="true">
+												<!--begin::Menu item-->
+												<div class="menu-item px-3">
+													<a href="#" class="menu-link px-3" data-kt-ecommerce-export="copy">Copy to clipboard</a>
+												</div>
+												<!--end::Menu item-->
+												<!--begin::Menu item-->
+												<div class="menu-item px-3">
+													<a href="#" class="menu-link px-3" data-kt-ecommerce-export="excel">Export as Excel</a>
+												</div>
+												<!--end::Menu item-->
+												<!--begin::Menu item-->
+												<div class="menu-item px-3">
+													<a href="#" class="menu-link px-3" data-kt-ecommerce-export="csv">Export as CSV</a>
+												</div>
+												<!--end::Menu item-->
+												<!--begin::Menu item-->
+												<div class="menu-item px-3">
+													<a href="#" class="menu-link px-3" data-kt-ecommerce-export="pdf">Export as PDF</a>
+												</div>
+												<!--end::Menu item-->
+											</div>
+											<!--end::Menu-->
+											<!--end::Export dropdown-->
+										</div>
+										<!--end::Card toolbar-->
+									</div>
+									<!--end::Card header-->
+									<!--begin::Card body-->
+									<div class="card-body pt-0">
+										<!--begin::Table-->
+										<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_report_sales_table">
+											<!--begin::Table head-->
+											<thead>
+												<!--begin::Table row-->
+												<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+													<th class="min-w-100px">Product</th>
+													<th class="text-end min-w-75px">Category</th>
+													<th class="text-end min-w-75px">Barcode Number</th>
+													<th class="text-end min-w-75px">Qty</th>
+														<th class="text-end min-w-75px">Actions</th>
+														
+											
+												</tr>
+												<!--end::Table row-->
+											</thead>
+											<!--end::Table head-->
+											<!--begin::Table body-->
+											<tbody class="fw-bold text-gray-600">
+												<!--begin::Table row-->
+												
+												<!--end::Table row-->
+											</tbody>
 
+											
+											<!--end::Table body-->
+										</table>
+										<!--end::Table-->
+										<a href="/ship/saveBatch/{{code}}" class="btn btn-primary" >Dispatch Batch</a>
+									</div>
+									<!--end::Card body-->
+								</div>
+								<!--end::Products-->
+							</div>
+			
 
 
 
@@ -1100,174 +1241,7 @@
 		<script src="assets/js/custom/utilities/modals/users-search.js"></script>
 
 
-
-
-
-
-
-
-
-
-
-
-    <script>
-      $(function(){
-    $('#customer').autocomplete({
-    source: function(req,res){
-
-      $.ajax({
-        url:"/autocomplete/",
-        dataType:"jsonp",
-        type:"GET",
-        data:req,
-        success: function(data){
-          res(data)
-        
-
-        },
-        error: function(err){
-          console.log(err.status);
-        }
-      });
-    },
-
-    minLength:1,
-    select: function(event,ui){
-
-  $.ajax({
-                dataType: 'json',
-                data: {
-                    code: ui.item.label,
-                    
-                },
-                type: 'POST',
-                url: "/auto",
-                success: function(data) {
-               
-                
-                 $("#customer").val(data.customer)
-                
-               
-                 
-                 
-                 
-          
-                }
-               
-            });
- 
-
-
-
-  
-	
-
-	}
-
-    });
-	
-      });
-      </script> 
-
-
-
-
-
-
-
-
-
- <script>
-      $(function(){
-    $('#shopName').autocomplete({
-    source: function(req,res){
-
-      $.ajax({
-        url:"/autocompleteX/",
-        dataType:"jsonp",
-        type:"GET",
-        data:req,
-        success: function(data){
-          res(data)
-        
-
-        },
-        error: function(err){
-          console.log(err.status);
-        }
-      });
-    },
-
-    minLength:1,
-    select: function(event,ui){
-
-  $.ajax({
-                dataType: 'json',
-                data: {
-                    code: ui.item.label,
-                    
-                },
-                type: 'POST',
-                url: "./autoShop",
-                success: function(data) {
-               
-                
-
-                   $('#shopName').val(data.name);
-               
-    
-          
-                
-            
-                }
-               
-            });
- 
-
-
-  
-    }
-
-
-
-    });
-
-      });
-      </script> 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-1.12.3.min.js"   integrity="sha256-aaODHAgvwQW1bFOGXMeX+pC4PZIPsvn2h1sArYOhgXQ="   crossorigin="anonymous"></script>
- <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>  
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> 
-
-
-
-
-
-
+<script src="scriptChartShip.js"></script>
 
 
 

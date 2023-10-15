@@ -20,6 +20,7 @@ var userSchema = new Schema({
     merch:{type:String, required:true},
     code:{type:String, required:true},
     truckCode:{type:String, required:true},
+    truckId:{type:String, required:true},
     dateAdded:{type:String, required:true},
     dateModified:{type:String, required:true},
     password: {type: String, required: true}

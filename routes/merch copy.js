@@ -267,30 +267,16 @@ router.post('/deliveries/:id',isLoggedIn,   (req, res) => {
  var category = req.body.category;
  var subCategory = req.body.subCategory;
  var barcodeNumber = req.body.barcodeNumber
- var casesDispatched = req.body.casesDispatched
- var unitCases = req.body.unitCases
+ var quantityDispatched = req.body.quantityDispatched
  let status3 = req.body.status3
  let status4
- var casesReceived = req.body.casesReceived
+ var quantityReceived = req.body.quantityReceived
  var cases
 
         let reg = /\d+\.*\d*/g;
 
-        let result = casesReceived.match(reg)
-        let caseRcvd = Number(result)
-
-
-      
-       // let reg2 = /\d+\.*\d*/g;
-
-        let result2 = unitCases.match(reg)
-        let untCases = Number(result2)
-
-
-        let result3 = casesDispatched.match(reg)
-        let caseDsptch = Number(result3)
-        var quantityDispatched = caseDsptch * untCases
-    var quantityReceived =  caseRcvd * untCases 
+        let result = quantityReceived.match(reg)
+        let quan = Number(result)
  var quantityVariance = quantityReceived - quantityDispatched
 if(quantityDispatched > quantityReceived){
     status3 ="Flagged"
@@ -306,7 +292,7 @@ console.log(quantityReceived,quantityDispatched,"qtyReceived")
  req.check('category','Enter Category').notEmpty();
  req.check('barcodeNumber','Enter Barcode Number').notEmpty();
  req.check('status3','Enter Answer').notEmpty();
- req.check('casesReceived','Enter Cases Delivered').notEmpty();
+ req.check('quantityReceived','Enter Quantity Delivered').notEmpty();
 
  
    

@@ -2153,6 +2153,9 @@ var date = m.format('L')
                   user.dateModified =date
                   user.merch = 'null'
                   user.userId = 'null'
+                  user.truckCode = 'null'
+                  user.code = 'null'
+                  user.truckId = 'null'
                   user.photo2 = 'null'
                   user.username = 'null'
                   user.username2 = username
@@ -2661,7 +2664,81 @@ router.post('/info',isLoggedIn, upload.single('file'),function(req,res){
                           });
 
 
+                          router.get('/viewStockRcvdUpdate/:id',isLoggedIn,function(req,res){
+                            var pro = req.user
+                            Truck.findById(req.params.id, (err, doc) => {
+                              if (!err) {
+                              
+                                  res.render("product/updateTruck", {
+                                     
+                                      doc: doc,pro:pro
+                                    
+                                      
+                                  });
+                                
+                              }
+                          });
+                          
+                          
+                          
+                          })
+                          
+                          
+                          router.post('/viewStockRcvdUpdate/:id',isLoggedIn, upload.single('myFile'),  (req, res) => {
+                            var pro = req.user
+                            var id = req.body._id;
+                            var code = req.body.code
+                           
+                            
+                            req.check('code','Enter Truck Code').notEmpty();
+                            
+                           
+                            
+                              
+                            var errors = req.validationErrors();
+                          
+                          
+                          
+                             if (errors) {
+                            
+                               
+                                  req.session.errors = errors;
+                                  req.session.success = false;
+                                  res.render('product/updateTruck',{ errors:req.session.errors, pro:pro})
+                               
+                              
+                              }
+                            
+                          else
+                          {
+                           
+                                  Truck.findOneAndUpdate({_id:id},req.body,
+                                    { new: true }, (err, doc) => {
+                                       if (!err) {
+                                       
+                                          //res.redirect('/records/gradeList');
+                                          StockV.find({truckId:id},function(err,docs){
+                                            for(var i = 0;i<docs.length;i++){
+                                              StockV.findByIdAndUpdate(docs[i]._id,{$set:{code:code}},function(err,locs){
 
+                                              })
+                                            }
+                                            res.redirect('/viewStockRcvd/')
+                                          })
+                                          console.log('333')
+                                         }
+                                       else {
+                                         console.log('error'+err)
+                                 
+                                       }
+                                     
+                                   })
+                                
+                          
+                              
+                          }
+                          
+                          });
 
 /*
                       

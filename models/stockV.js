@@ -11,6 +11,7 @@ var schemaV = new Schema({
     unitCases: {type: Number, required: true},
     mformat: {type: String, required: true},
     code: {type: String, required: true},
+    truckId: {type: String, required: true},
     status: {type: String, required: true},
    
    

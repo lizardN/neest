@@ -101,7 +101,7 @@ router.get('/stockBatch',isLoggedIn,  function(req,res){
       truck.save()
           .then(pro =>{
 
-      User.findByIdAndUpdate(id,{$set:{truckCode:code}}, function(err,coc){
+      User.findByIdAndUpdate(id,{$set:{truckCode:code,truckId:pro._id}}, function(err,coc){
           
         
       })
@@ -142,7 +142,8 @@ router.get('/addStock2',isLoggedIn,function(req,res){
   
   var errorMsg = req.flash('danger')[0];
   var successMsg = req.flash('success')[0];
-  res.render('product/stock2',{pro:pro,code:code,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg})
+ res.render('product/stock2',{pro:pro,code:code,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg})
+ //res.render('barcode/stock',{pro:pro,code:code,successMsg: successMsg,errorMsg:errorMsg, noMessages: !successMsg,noMessages2:!errorMsg})
 })
 
 router.post('/addStock',isLoggedIn, function(req,res){
@@ -295,6 +296,7 @@ var quantity  = casesReceived * unitCases
 
 router.post('/addStock2',isLoggedIn, function(req,res){
   var pro = req.user
+  var truckId = req.user.truckId
   var barcodeNumber = req.body.barcodeNumber;
   var name = req.body.name;
   var m = moment()
@@ -349,6 +351,7 @@ var quantity  = casesReceived * unitCases
   book.name = name
   book.mformat = mformat
   book.code =  code
+  book.truckId = truckId
   book.unitCases= unitCases
   book.status = 'null'
   book.cases = casesReceived
